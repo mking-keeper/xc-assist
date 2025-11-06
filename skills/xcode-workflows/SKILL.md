@@ -5,24 +5,28 @@ description: Xcode build system guidance for xcodebuild operations. Use when bui
 
 # Xcode Workflows
 
-**Comprehensive guide to iOS build operations with xcodebuild**
+**Use the `execute_xcode_command` MCP tool for all iOS build operations**
+
+The xclaude-plugin provides the `execute_xcode_command` MCP tool which consolidates all xcodebuild operations into a single, token-efficient dispatcher.
 
 ## Quick Reference
 
-| Task | Operation | Key Parameters |
-|------|-----------|----------------|
-| Build for simulator | `build` | scheme, configuration:Debug |
-| Build for device | `build` | scheme, configuration:Release, destination |
-| Run tests | `test` | scheme, destination |
-| Clean build | `clean` | scheme |
-| List schemes | `list` | - |
-| Get Xcode info | `version` | - |
+| Task | MCP Tool | Operation | Key Parameters |
+|------|----------|-----------|----------------|
+| Build for simulator | `execute_xcode_command` | `build` | scheme, configuration:Debug |
+| Build for device | `execute_xcode_command` | `build` | scheme, configuration:Release, destination |
+| Run tests | `execute_xcode_command` | `test` | scheme, destination |
+| Clean build | `execute_xcode_command` | `clean` | scheme |
+| List schemes | `execute_xcode_command` | `list` | - |
+| Get Xcode info | `execute_xcode_command` | `version` | - |
 
 ## Standard Workflows
 
 ### 1. Building an App
 
-**Step 1: Discover Schemes**
+**Step 1: Discover Schemes - Use `execute_xcode_command` with operation: "list"**
+
+Invoke the `execute_xcode_command` MCP tool:
 
 ```json
 {
@@ -41,7 +45,9 @@ description: Xcode build system guidance for xcodebuild operations. Use when bui
 }
 ```
 
-**Step 2: Build**
+**Step 2: Build - Use `execute_xcode_command` with operation: "build"**
+
+Invoke the `execute_xcode_command` MCP tool with build parameters:
 
 ```json
 {

@@ -5,25 +5,29 @@ description: iOS Simulator device and app management with simctl. Use when manag
 
 # Simulator Workflows
 
-**Comprehensive guide to iOS Simulator management**
+**Use the `execute_simulator_command` MCP tool for all simulator management**
+
+The xclaude-plugin provides the `execute_simulator_command` MCP tool which consolidates all simctl operations into a single, token-efficient dispatcher.
 
 ## Quick Reference
 
-| Task | Operation | Sub-Operation |
-|------|-----------|---------------|
-| List devices | `list` | - |
-| Boot device | `device-lifecycle` | `boot` |
-| Shutdown device | `device-lifecycle` | `shutdown` |
-| Create device | `device-lifecycle` | `create` |
-| Delete device | `device-lifecycle` | `delete` |
-| Install app | `app-lifecycle` | `install` |
-| Launch app | `app-lifecycle` | `launch` |
-| Screenshot | `io` | `screenshot` |
-| Health check | `health-check` | - |
+| Task | MCP Tool | Operation | Sub-Operation |
+|------|----------|-----------|---------------|
+| List devices | `execute_simulator_command` | `list` | - |
+| Boot device | `execute_simulator_command` | `device-lifecycle` | `boot` |
+| Shutdown device | `execute_simulator_command` | `device-lifecycle` | `shutdown` |
+| Create device | `execute_simulator_command` | `device-lifecycle` | `create` |
+| Delete device | `execute_simulator_command` | `device-lifecycle` | `delete` |
+| Install app | `execute_simulator_command` | `app-lifecycle` | `install` |
+| Launch app | `execute_simulator_command` | `app-lifecycle` | `launch` |
+| Screenshot | `execute_simulator_command` | `io` | `screenshot` |
+| Health check | `execute_simulator_command` | `health-check` | - |
 
 ## Device Management
 
-### 1. Listing Devices
+### 1. Listing Devices - Use `execute_simulator_command` with operation: "list"
+
+Invoke the `execute_simulator_command` MCP tool:
 
 ```json
 {
@@ -57,7 +61,9 @@ description: iOS Simulator device and app management with simctl. Use when manag
 
 **Note:** Large device lists use progressive disclosure to save tokens.
 
-### 2. Booting a Simulator
+### 2. Booting a Simulator - Use `execute_simulator_command` with device-lifecycle
+
+Invoke the `execute_simulator_command` MCP tool:
 
 **By Name:**
 ```json

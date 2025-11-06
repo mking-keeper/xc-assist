@@ -5,11 +5,15 @@ description: Accessibility-first UI automation using IDB. Query accessibility tr
 
 # UI Automation Workflows
 
-**Accessibility-first UI automation for iOS simulators**
+**Use the `execute_idb_command` MCP tool for all UI automation**
+
+The xclaude-plugin provides the `execute_idb_command` MCP tool which consolidates all IDB UI automation operations into a single, token-efficient dispatcher.
 
 ## Core Principle: Accessibility Before Screenshots
 
 **Always query the accessibility tree first.** Only use screenshots as a fallback.
+
+Use the `execute_idb_command` MCP tool with operation `describe` to access the accessibility tree.
 
 ### Why Accessibility-First?
 
@@ -22,9 +26,11 @@ description: Accessibility-first UI automation using IDB. Query accessibility tr
 
 ## Standard Workflow
 
-### 1. Check Accessibility Quality (Optional)
+### 1. Check Accessibility Quality (Optional) - Use `execute_idb_command`
 
 Before starting automation, check if the app has good accessibility support:
+
+Invoke the `execute_idb_command` MCP tool:
 
 ```json
 {
@@ -39,9 +45,11 @@ Before starting automation, check if the app has good accessibility support:
 
 **Note:** Most modern iOS apps have good accessibility support. Skip this check if you're confident.
 
-### 2. Query Accessibility Tree
+### 2. Query Accessibility Tree - Use `execute_idb_command` with operation: "describe"
 
 **This is your starting point for all UI automation:**
+
+Invoke the `execute_idb_command` MCP tool:
 
 ```json
 {
