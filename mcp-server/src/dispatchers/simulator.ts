@@ -339,40 +339,159 @@ export class SimulatorDispatcher extends BaseDispatcher<
     }
   }
 
+  /**
+   * Captures screenshots or records video from the simulator
+   * Note: Video recording requires manual stop or process termination
+   */
   private async executeIO(
     params: Partial<IOParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // TODO: Implement IO operations (screenshot, video)
-    const data: DeviceLifecycleResultData = {
-      message: 'IO operation not yet implemented',
-      sub_operation: params.sub_operation || 'screenshot',
-      note: 'Screenshot and video capture will be implemented',
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+
+      if (!params.sub_operation) {
+        return this.formatError('sub_operation required for io', 'io');
+      }
+
+      const deviceId = params.device_id || 'booted';
+      const subOp = params.sub_operation as IOSubOperation;
+      const outputPath = params.parameters?.output_path;
+
+      if (!outputPath) {
+        return this.formatError('output_path required in parameters for io operation', 'io');
+      }
+
+      switch (subOp) {
+        case 'screenshot': {
+          await runCommand('xcrun', ['simctl', 'io', deviceId, 'screenshot', outputPath]);
+
+          const data: DeviceLifecycleResultData = {
+            message: `Screenshot saved to: ${outputPath}`,
+            sub_operation: 'screenshot',
+            device_id: deviceId,
+            note: `Screenshot captured from device ${deviceId}`,
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'video': {
+          // Video recording is a long-running operation
+          // For now, we'll note that this requires background execution or manual stop
+          const data: DeviceLifecycleResultData = {
+            message: 'Video recording requires background execution',
+            sub_operation: 'video',
+            device_id: deviceId,
+            note: `To record video, use: xcrun simctl io ${deviceId} recordVideo ${outputPath} (requires manual stop with Ctrl+C or process termination)`,
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        default:
+          return this.formatError(`Unknown io sub_operation: ${subOp}`, 'io');
+      }
+    } catch (error) {
+      logger.error('IO operation failed', error as Error);
+      return this.formatError(error as Error, 'io');
+    }
   }
 
+  /**
+   * Simulates push notifications to apps in the simulator
+   * Accepts JSON payload as string or file path
+   */
   private async executePush(
-    _params: Partial<PushParams>
+    params: Partial<PushParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // TODO: Implement push notification simulation
-    const data: AppLifecycleResultData = {
-      message: 'Push notification operation not yet implemented',
-      sub_operation: 'push',
-      note: 'Push notification simulation will be implemented',
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+      const { writeFile, unlink } = await import('fs/promises');
+      const { join } = await import('path');
+      const { tmpdir } = await import('os');
+
+      if (!params.app_identifier) {
+        return this.formatError('app_identifier required for push', 'push');
+      }
+
+      const payload = params.parameters?.payload;
+      if (!payload) {
+        return this.formatError('payload required in parameters for push', 'push');
+      }
+
+      const deviceId = params.device_id || 'booted';
+      const bundleId = params.app_identifier;
+
+      // Determine if payload is a file path or JSON content
+      let payloadPath: string;
+      let isTemporaryFile = false;
+
+      if (payload.endsWith('.json') || payload.startsWith('/')) {
+        // Assume it's a file path
+        payloadPath = payload;
+      } else {
+        // Treat as JSON content - create temporary file
+        payloadPath = join(tmpdir(), `push-notification-${Date.now()}.json`);
+        await writeFile(payloadPath, payload, 'utf8');
+        isTemporaryFile = true;
+      }
+
+      try {
+        await runCommand('xcrun', ['simctl', 'push', deviceId, bundleId, payloadPath]);
+
+        const data: AppLifecycleResultData = {
+          message: `Push notification sent to ${bundleId}`,
+          sub_operation: 'push',
+          app_identifier: bundleId,
+          note: `Notification delivered to device ${deviceId}`,
+        };
+
+        return this.formatSuccess(data);
+      } finally {
+        // Clean up temporary file if created
+        if (isTemporaryFile) {
+          try {
+            await unlink(payloadPath);
+          } catch {
+            // Ignore cleanup errors
+          }
+        }
+      }
+    } catch (error) {
+      logger.error('Push notification operation failed', error as Error);
+      return this.formatError(error as Error, 'push');
+    }
   }
 
+  /**
+   * Opens a URL in the simulator (deep links, universal links, Safari)
+   */
   private async executeOpenURL(
-    _params: Partial<OpenURLParams>
+    params: Partial<OpenURLParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // TODO: Implement URL opening in simulator
-    const data: AppLifecycleResultData = {
-      message: 'OpenURL operation not yet implemented',
-      sub_operation: 'launch',
-      note: 'URL opening will be implemented',
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+
+      if (!params.parameters?.url) {
+        return this.formatError('url required in parameters for openurl', 'openurl');
+      }
+
+      const deviceId = params.device_id || 'booted';
+      const url = params.parameters.url;
+
+      await runCommand('xcrun', ['simctl', 'openurl', deviceId, url]);
+
+      const data: AppLifecycleResultData = {
+        message: `Opened URL in simulator: ${url}`,
+        sub_operation: 'openurl',
+        note: `URL opened on device ${deviceId}`,
+      };
+
+      return this.formatSuccess(data);
+    } catch (error) {
+      logger.error('OpenURL operation failed', error as Error);
+      return this.formatError(error as Error, 'openurl');
+    }
   }
 
   private async executeList(
@@ -493,15 +612,48 @@ export class SimulatorDispatcher extends BaseDispatcher<
     }
   }
 
+  /**
+   * Gets the filesystem path to an app's container
+   * Container types: 'data' (app data), 'bundle' (app bundle), 'group' (shared container)
+   */
   private async executeGetAppContainer(
-    _params: Partial<GetAppContainerParams>
+    params: Partial<GetAppContainerParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // TODO: Implement app container path retrieval
-    const data: AppLifecycleResultData = {
-      message: 'Get app container operation not yet implemented',
-      sub_operation: 'get-container',
-      note: 'App container path retrieval will be implemented',
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+
+      if (!params.device_id || !params.app_identifier) {
+        return this.formatError(
+          'device_id and app_identifier required for get-app-container',
+          'get-app-container'
+        );
+      }
+
+      const deviceId = params.device_id;
+      const bundleId = params.app_identifier;
+      const containerType = params.parameters?.container_type || 'data';
+
+      const result = await runCommand('xcrun', [
+        'simctl',
+        'get_app_container',
+        deviceId,
+        bundleId,
+        containerType,
+      ]);
+
+      const containerPath = result.stdout.trim();
+
+      const data: AppLifecycleResultData = {
+        message: `App container path: ${containerPath}`,
+        sub_operation: 'get-container',
+        app_identifier: bundleId,
+        note: `Container type: ${containerType}`,
+      };
+
+      return this.formatSuccess(data);
+    } catch (error) {
+      logger.error('Get app container operation failed', error as Error);
+      return this.formatError(error as Error, 'get-app-container');
+    }
   }
 }

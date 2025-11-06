@@ -157,6 +157,7 @@ export interface SimulatorParameters {
   environment?: Record<string, string>;
   new_name?: string;
   container_type?: 'data' | 'bundle' | 'group';
+  payload?: string; // JSON string or file path for push notifications
 }
 
 export interface DeviceLifecycleParams {
@@ -271,8 +272,13 @@ export interface IDBParameters {
   x?: number;
   y?: number;
   duration?: number;
+  start_x?: number; // Swipe gesture start X coordinate
+  start_y?: number; // Swipe gesture start Y coordinate
+  end_x?: number; // Swipe gesture end X coordinate
+  end_y?: number; // Swipe gesture end Y coordinate
   text?: string;
   key?: string;
+  key_sequence?: string[]; // Array of key names for sequential key presses
   gesture_type?: 'swipe' | 'button';
   direction?: 'up' | 'down' | 'left' | 'right';
   button?: 'HOME' | 'LOCK' | 'SIRI' | 'SIDE_BUTTON';
@@ -286,6 +292,7 @@ export interface IDBParameters {
   elements?: Array<Record<string, unknown>>;
   matches?: Array<Record<string, unknown>>;
   apps?: Array<Record<string, unknown>>;
+  targets?: Array<Record<string, unknown>>;
   score?: number;
   total_elements?: number;
   labeled_elements?: number;
@@ -307,6 +314,7 @@ export interface InputParams {
   parameters: {
     text?: string;
     key?: string;
+    key_sequence?: string[];
   };
 }
 
@@ -316,6 +324,11 @@ export interface GestureParams {
     gesture_type: 'swipe' | 'button';
     direction?: 'up' | 'down' | 'left' | 'right';
     button?: 'HOME' | 'LOCK' | 'SIRI' | 'SIDE_BUTTON';
+    start_x?: number;
+    start_y?: number;
+    end_x?: number;
+    end_y?: number;
+    duration?: number;
   };
 }
 

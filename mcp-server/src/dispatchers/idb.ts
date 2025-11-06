@@ -186,28 +186,144 @@ export class IDBDispatcher extends BaseDispatcher<IDBOperationArgs, IDBResultDat
     }
   }
 
+  /**
+   * Input text and keyboard events to iOS apps
+   * Supports: text input, single key presses, key sequences
+   */
   private async executeInput(
     params: Partial<InputParams>
   ): Promise<OperationResult<IDBResultData>> {
-    // Placeholder
-    const data: IDBOperationResultData = {
-      message: 'Input operation not yet implemented',
-      note: 'Will support text, key, and key-sequence operations',
-      params: params.parameters,
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+
+      if (!params.parameters) {
+        return this.formatError('parameters required for input', 'input');
+      }
+
+      const target = params.target || 'booted';
+      const { text, key, key_sequence } = params.parameters;
+
+      // Handle text input
+      if (text) {
+        await runCommand('idb', ['--udid', target, 'ui', 'text', text]);
+
+        const data: IDBOperationResultData = {
+          message: `Typed text: "${text}"`,
+          note: 'Text input completed',
+        };
+
+        return this.formatSuccess(data);
+      }
+
+      // Handle single key press
+      if (key) {
+        await runCommand('idb', ['--udid', target, 'ui', 'key', key]);
+
+        const data: IDBOperationResultData = {
+          message: `Pressed key: ${key}`,
+          note: 'Key press completed',
+        };
+
+        return this.formatSuccess(data);
+      }
+
+      // Handle key sequence
+      if (key_sequence && Array.isArray(key_sequence) && key_sequence.length > 0) {
+        for (const keyName of key_sequence) {
+          await runCommand('idb', ['--udid', target, 'ui', 'key', keyName]);
+        }
+
+        const data: IDBOperationResultData = {
+          message: `Pressed ${key_sequence.length} key(s) in sequence`,
+          note: `Keys: ${key_sequence.join(', ')}`,
+        };
+
+        return this.formatSuccess(data);
+      }
+
+      return this.formatError('text, key, or key_sequence required in parameters', 'input');
+    } catch (error) {
+      logger.error('Input operation failed', error as Error);
+      return this.formatError(error as Error, 'input');
+    }
   }
 
+  /**
+   * Performs swipe gestures and hardware button presses
+   * Swipe: Requires start/end coordinates and optional duration
+   * Button: Supports HOME, LOCK, SIDE_BUTTON, SIRI
+   */
   private async executeGesture(
     params: Partial<GestureParams>
   ): Promise<OperationResult<IDBResultData>> {
-    // Placeholder
-    const data: IDBOperationResultData = {
-      message: 'Gesture operation not yet implemented',
-      note: 'Will support swipe and button operations (HOME, LOCK, etc.)',
-      params: params.parameters,
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+
+      if (!params.parameters?.gesture_type) {
+        return this.formatError('gesture_type required in parameters', 'gesture');
+      }
+
+      const target = params.target || 'booted';
+      const gestureType = params.parameters.gesture_type;
+
+      if (gestureType === 'swipe') {
+        // Swipe gesture requires coordinates
+        const { start_x, start_y, end_x, end_y, duration = 200 } = params.parameters;
+
+        if (
+          start_x === undefined ||
+          start_y === undefined ||
+          end_x === undefined ||
+          end_y === undefined
+        ) {
+          return this.formatError(
+            'start_x, start_y, end_x, end_y required for swipe gesture',
+            'gesture'
+          );
+        }
+
+        await runCommand('idb', [
+          '--udid',
+          target,
+          'ui',
+          'swipe',
+          String(start_x),
+          String(start_y),
+          String(end_x),
+          String(end_y),
+          '--duration',
+          String(duration),
+        ]);
+
+        const data: IDBOperationResultData = {
+          message: `Swiped from (${start_x},${start_y}) to (${end_x},${end_y})`,
+          note: `Swipe duration: ${duration}ms`,
+        };
+
+        return this.formatSuccess(data);
+      } else if (gestureType === 'button') {
+        // Button press
+        const { button } = params.parameters;
+
+        if (!button) {
+          return this.formatError('button required for button gesture', 'gesture');
+        }
+
+        await runCommand('idb', ['--udid', target, 'ui', 'button', button]);
+
+        const data: IDBOperationResultData = {
+          message: `Pressed ${button} button`,
+          note: 'Hardware button press completed',
+        };
+
+        return this.formatSuccess(data);
+      }
+
+      return this.formatError(`Unknown gesture_type: ${gestureType}`, 'gesture');
+    } catch (error) {
+      logger.error('Gesture operation failed', error as Error);
+      return this.formatError(error as Error, 'gesture');
+    }
   }
 
   private async executeDescribe(
@@ -289,14 +405,102 @@ export class IDBDispatcher extends BaseDispatcher<IDBOperationArgs, IDBResultDat
     }
   }
 
+  /**
+   * Manages app lifecycle via IDB
+   * Supports: install, uninstall, launch, terminate
+   */
   private async executeApp(params: Partial<IDBAppParams>): Promise<OperationResult<IDBResultData>> {
-    // Placeholder
-    const data: IDBOperationResultData = {
-      message: 'App operation not yet implemented',
-      note: 'Will support install, uninstall, launch, terminate via IDB',
-      params: params.parameters,
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+
+      if (!params.parameters?.sub_operation) {
+        return this.formatError('sub_operation required in parameters', 'app');
+      }
+
+      const target = params.target || 'booted';
+      const subOp = params.parameters.sub_operation;
+      const bundleId = params.parameters.bundle_id;
+      const appPath = params.parameters.app_path;
+
+      switch (subOp) {
+        case 'install': {
+          if (!appPath) {
+            return this.formatError('app_path required for install', 'app');
+          }
+
+          await runCommand('idb', ['--udid', target, 'install', appPath]);
+
+          const data: IDBOperationResultData = {
+            message: `App installed from: ${appPath}`,
+            note: 'App installation completed',
+            params: { sub_operation: 'install', app_path: appPath },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'uninstall': {
+          if (!bundleId) {
+            return this.formatError('bundle_id required for uninstall', 'app');
+          }
+
+          await runCommand('idb', ['--udid', target, 'uninstall', bundleId]);
+
+          const data: IDBOperationResultData = {
+            message: `App uninstalled: ${bundleId}`,
+            note: 'App uninstallation completed',
+            params: { sub_operation: 'uninstall', bundle_id: bundleId },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'launch': {
+          if (!bundleId) {
+            return this.formatError('bundle_id required for launch', 'app');
+          }
+
+          const result = await runCommand('idb', ['--udid', target, 'launch', bundleId]);
+
+          // Parse PID from output if present
+          let pid: string | undefined;
+          const pidMatch = result.stdout.match(/pid:\s*(\d+)/i);
+          if (pidMatch) {
+            pid = pidMatch[1];
+          }
+
+          const data: IDBOperationResultData = {
+            message: `App launched: ${bundleId}`,
+            note: pid ? `Process ID: ${pid}` : 'App launched successfully',
+            params: { sub_operation: 'launch', bundle_id: bundleId, pid },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'terminate': {
+          if (!bundleId) {
+            return this.formatError('bundle_id required for terminate', 'app');
+          }
+
+          await runCommand('idb', ['--udid', target, 'terminate', bundleId]);
+
+          const data: IDBOperationResultData = {
+            message: `App terminated: ${bundleId}`,
+            note: 'App termination completed',
+            params: { sub_operation: 'terminate', bundle_id: bundleId },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        default:
+          return this.formatError(`Unknown sub_operation: ${subOp}`, 'app');
+      }
+    } catch (error) {
+      logger.error('App operation failed', error as Error);
+      return this.formatError(error as Error, 'app');
+    }
   }
 
   private async executeListApps(
@@ -401,15 +605,72 @@ export class IDBDispatcher extends BaseDispatcher<IDBOperationArgs, IDBResultDat
     }
   }
 
+  /**
+   * Manages IDB target connections
+   * Supports: list, describe, connect, disconnect
+   */
   private async executeTargets(
     params: Partial<TargetsParams>
   ): Promise<OperationResult<IDBResultData>> {
-    // Placeholder
-    const data: IDBOperationResultData = {
-      message: 'Targets operation not yet implemented',
-      note: 'Will manage IDB target connections (list, describe, connect, disconnect)',
-      params: params.parameters,
-    };
-    return this.formatSuccess(data);
+    try {
+      const { runCommand } = await import('../utils/command.js');
+      const subOp = params.parameters?.sub_operation || 'list';
+
+      switch (subOp) {
+        case 'list': {
+          const result = await runCommand('idb', ['list-targets', '--json']);
+          const targets = JSON.parse(result.stdout);
+
+          const targetCount = Array.isArray(targets) ? targets.length : 0;
+
+          const data: IDBOperationResultData = {
+            message: `Found ${targetCount} IDB target(s)`,
+            note: 'Use describe to get details about a specific target',
+            params: { sub_operation: 'list', targets },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'describe': {
+          const result = await runCommand('idb', ['describe', '--json']);
+          const targetInfo = JSON.parse(result.stdout);
+
+          const data: IDBOperationResultData = {
+            message: 'Target description retrieved',
+            note: 'Current IDB target details',
+            params: { sub_operation: 'describe', ...targetInfo },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'connect': {
+          const data: IDBOperationResultData = {
+            message: 'Target connection managed automatically',
+            note: 'IDB automatically connects to the specified target (--udid) for each operation',
+            params: { sub_operation: 'connect' },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        case 'disconnect': {
+          const data: IDBOperationResultData = {
+            message: 'Target disconnection not required',
+            note: 'IDB automatically manages connections. Use list-targets to see available targets',
+            params: { sub_operation: 'disconnect' },
+          };
+
+          return this.formatSuccess(data);
+        }
+
+        default:
+          return this.formatError(`Unknown sub_operation: ${subOp}`, 'targets');
+      }
+    } catch (error) {
+      logger.error('Targets operation failed', error as Error);
+      return this.formatError(error as Error, 'targets');
+    }
   }
 }
