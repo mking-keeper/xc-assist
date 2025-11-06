@@ -1,5 +1,9 @@
 # xclaude-plugin
 
+```
+/plugin marketplace add conorluddy/xclaude-plugin
+```
+
 **Complete iOS development automation for Claude Code**
 
 Build, test, and automate iOS apps through natural conversation with Claude. Full Xcode, Simulator, and UI automation capabilities with minimal context overhead.
