@@ -10,7 +10,8 @@
     "build": "npm run build --workspace=mcp-server",
     "dev": "npm run dev --workspace=mcp-server",
     "test": "npm run test --workspace=mcp-server",
-    "clean": "rm -rf mcp-server/dist"
+    "clean": "rm -rf mcp-server/dist",
+    "prepare": "husky"
   },
   "keywords": [
     "xcode",
@@ -31,6 +32,14 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
     "typescript": "^5.3.0"
+  },
+  "lint-staged": {
+    "mcp-server/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

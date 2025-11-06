@@ -1,0 +1,11 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run lint-staged for auto-fixing and formatting
+npx lint-staged
+
+# Run type checking in mcp-server workspace
+npm run typecheck --workspace=mcp-server
+
+# Run linting in mcp-server workspace
+npm run lint --workspace=mcp-server
