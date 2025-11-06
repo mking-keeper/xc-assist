@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { persistenceManager } from './persistence.js';
+import { CACHE_CONFIG } from '../constants.js';
 
 export interface CachedResponse {
   id: string;
@@ -14,8 +15,8 @@ export interface CachedResponse {
 
 export class ResponseCache {
   private cache = new Map<string, CachedResponse>();
-  private readonly maxAge = 1000 * 60 * 30; // 30 minutes
-  private readonly maxEntries = 100;
+  private readonly maxAge = CACHE_CONFIG.MAX_AGE_MS;
+  private readonly maxEntries = CACHE_CONFIG.MAX_ENTRIES;
 
   constructor() {
     // Load persisted state asynchronously without blocking initialization
@@ -152,7 +153,7 @@ export class ResponseCache {
       } catch (error) {
         console.warn('Failed to persist response cache state:', error);
       }
-    }, 1000);
+    }, CACHE_CONFIG.PERSISTENCE_DEBOUNCE_MS);
   }
 }
 

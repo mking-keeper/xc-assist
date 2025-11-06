@@ -21,6 +21,7 @@ import { SimulatorDispatcher } from './dispatchers/simulator.js';
 import { IDBDispatcher } from './dispatchers/idb.js';
 import { ResourceCatalog } from './resources/catalog.js';
 import { logger } from './utils/logger.js';
+import type { XcodeOperationArgs, SimulatorOperationArgs, IDBOperationArgs } from './types.js';
 
 // Initialize MCP server
 const server = new Server(
@@ -68,15 +69,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     switch (name) {
       case 'execute_xcode_command':
-        result = await xcodeDispatcher.execute(toolArgs as never);
+        result = await xcodeDispatcher.execute(toolArgs as unknown as XcodeOperationArgs);
         break;
 
       case 'execute_simulator_command':
-        result = await simulatorDispatcher.execute(toolArgs as never);
+        result = await simulatorDispatcher.execute(toolArgs as unknown as SimulatorOperationArgs);
         break;
 
       case 'execute_idb_command':
-        result = await idbDispatcher.execute(toolArgs as never);
+        result = await idbDispatcher.execute(toolArgs as unknown as IDBOperationArgs);
         break;
 
       default:

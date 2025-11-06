@@ -17,6 +17,7 @@ import type {
   BuildParams,
   CleanParams,
   TestParams,
+  TestOptions,
   ListParams,
   BuildResultData,
   TestResultData,
@@ -97,7 +98,7 @@ export class XcodeDispatcher extends BaseDispatcher<XcodeOperationArgs, XcodeRes
             project_path,
             scheme,
             destination,
-            options: options as never, // TestOptions differ from XcodeBuildOptions
+            options: options as TestOptions | undefined,
           });
 
         case 'list':

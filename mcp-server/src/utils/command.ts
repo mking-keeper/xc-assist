@@ -1,6 +1,7 @@
 import { exec, execSync, spawn } from 'child_process';
 import { promisify } from 'util';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
+import { COMMAND_CONFIG } from '../constants.js';
 
 const execAsync = promisify(exec);
 
@@ -21,8 +22,8 @@ export async function executeCommand(
   options: CommandOptions = {}
 ): Promise<CommandResult> {
   const defaultOptions = {
-    timeout: 300000, // 5 minutes default timeout
-    maxBuffer: 10 * 1024 * 1024, // 10MB max buffer
+    timeout: COMMAND_CONFIG.DEFAULT_TIMEOUT_MS,
+    maxBuffer: COMMAND_CONFIG.DEFAULT_MAX_BUFFER_BYTES,
     ...options,
   };
 
@@ -70,8 +71,8 @@ export async function executeCommandWithArgs(
   options: CommandOptions = {}
 ): Promise<CommandResult> {
   const defaultOptions = {
-    timeout: 300000, // 5 minutes default timeout
-    maxBuffer: 10 * 1024 * 1024, // 10MB max buffer
+    timeout: COMMAND_CONFIG.DEFAULT_TIMEOUT_MS,
+    maxBuffer: COMMAND_CONFIG.DEFAULT_MAX_BUFFER_BYTES,
     ...options,
   };
 
@@ -146,7 +147,7 @@ export function executeCommandSync(command: string): CommandResult {
   try {
     const stdout = execSync(command, {
       encoding: 'utf8',
-      maxBuffer: 10 * 1024 * 1024,
+      maxBuffer: COMMAND_CONFIG.DEFAULT_MAX_BUFFER_BYTES,
     });
     return {
       stdout: stdout.trim(),

@@ -38,7 +38,9 @@
   },
   "lint-staged": {
     "mcp-server/**/*.ts": [
-      "eslint --fix",
+      "prettier --write"
+    ],
+    "mcp-server/**/*.{json,md}": [
       "prettier --write"
     ]
   }

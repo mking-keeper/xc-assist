@@ -15,8 +15,11 @@ import type {
   SimulatorResultData,
   OperationResult,
   DeviceLifecycleParams,
+  DeviceLifecycleSubOperation,
   AppLifecycleParams,
+  AppLifecycleSubOperation,
   IOParams,
+  IOSubOperation,
   PushParams,
   OpenURLParams,
   GetAppContainerParams,
@@ -91,7 +94,7 @@ export class SimulatorDispatcher extends BaseDispatcher<
           }
           return await this.executeDeviceLifecycle({
             device_id,
-            sub_operation: sub_operation as never,
+            sub_operation: sub_operation as DeviceLifecycleSubOperation,
             parameters,
           });
 
@@ -105,7 +108,7 @@ export class SimulatorDispatcher extends BaseDispatcher<
           return await this.executeAppLifecycle({
             device_id,
             app_identifier,
-            sub_operation: sub_operation as never,
+            sub_operation: sub_operation as AppLifecycleSubOperation,
             parameters,
           });
 
@@ -115,7 +118,7 @@ export class SimulatorDispatcher extends BaseDispatcher<
           }
           return await this.executeIO({
             device_id,
-            sub_operation: sub_operation as never,
+            sub_operation: sub_operation as IOSubOperation,
             parameters,
           });
 
@@ -171,7 +174,7 @@ export class SimulatorDispatcher extends BaseDispatcher<
   ): Promise<OperationResult<SimulatorResultData>> {
     try {
       const { runCommand } = await import('../utils/command.js');
-      const subOp = params.sub_operation as never;
+      const subOp = params.sub_operation as DeviceLifecycleSubOperation | undefined;
 
       switch (subOp) {
         case 'boot': {
@@ -257,7 +260,7 @@ export class SimulatorDispatcher extends BaseDispatcher<
   ): Promise<OperationResult<SimulatorResultData>> {
     try {
       const { runCommand } = await import('../utils/command.js');
-      const subOp = params.sub_operation as never;
+      const subOp = params.sub_operation as AppLifecycleSubOperation | undefined;
       const deviceId = params.device_id || 'booted';
 
       switch (subOp) {
@@ -308,7 +311,7 @@ export class SimulatorDispatcher extends BaseDispatcher<
             sub_operation: 'launch',
             app_identifier: params.app_identifier,
             status: 'running',
-            params: pidMatch ? ({ pid: pidMatch[1] } as never) : undefined,
+            pid: pidMatch ? pidMatch[1] : undefined,
           };
           return this.formatSuccess(data);
         }
@@ -339,35 +342,35 @@ export class SimulatorDispatcher extends BaseDispatcher<
   private async executeIO(
     params: Partial<IOParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // Placeholder - IO returns device lifecycle style data
+    // TODO: Implement IO operations (screenshot, video)
     const data: DeviceLifecycleResultData = {
       message: 'IO operation not yet implemented',
-      sub_operation: (params.sub_operation || '') as never,
-      params: params as never,
+      sub_operation: params.sub_operation || 'screenshot',
+      note: 'Screenshot and video capture will be implemented',
     };
     return this.formatSuccess(data);
   }
 
   private async executePush(
-    params: Partial<PushParams>
+    _params: Partial<PushParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // Placeholder
+    // TODO: Implement push notification simulation
     const data: AppLifecycleResultData = {
       message: 'Push notification operation not yet implemented',
-      sub_operation: 'install',
-      params: params as never,
+      sub_operation: 'push',
+      note: 'Push notification simulation will be implemented',
     };
     return this.formatSuccess(data);
   }
 
   private async executeOpenURL(
-    params: Partial<OpenURLParams>
+    _params: Partial<OpenURLParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // Placeholder
+    // TODO: Implement URL opening in simulator
     const data: AppLifecycleResultData = {
       message: 'OpenURL operation not yet implemented',
       sub_operation: 'launch',
-      params: params as never,
+      note: 'URL opening will be implemented',
     };
     return this.formatSuccess(data);
   }
@@ -401,11 +404,17 @@ export class SimulatorDispatcher extends BaseDispatcher<
 
       // Cache full device list for progressive disclosure
       const cache = new ResponseCache();
-      const cacheId = await cache.store({
-        fullData: devices,
-        deviceCount: devices.length,
-        bootedDevices: devices.filter((d: { state: string }) => d.state === 'Booted'),
-      } as never);
+      const cacheId = cache.store({
+        tool: 'simulator-list',
+        fullOutput: JSON.stringify(devices, null, 2),
+        stderr: '',
+        exitCode: 0,
+        command: 'xcrun simctl list devices --json',
+        metadata: {
+          deviceCount: devices.length,
+          bootedCount: devices.filter((d) => d.state === 'Booted').length,
+        },
+      });
 
       // Return summary with cache_id
       const bootedCount = devices.filter((d) => d.state === 'Booted').length;
@@ -429,14 +438,13 @@ export class SimulatorDispatcher extends BaseDispatcher<
 
       // Check Xcode installation
       let xcodeVersion: string | undefined;
-      let _xcodePath: string | undefined;
       try {
         const versionResult = await runCommand('xcodebuild', ['-version']);
         const versionMatch = versionResult.stdout.match(/Xcode\s+([\d.]+)/);
         xcodeVersion = versionMatch ? versionMatch[1] : undefined;
 
-        const pathResult = await runCommand('xcode-select', ['-p']);
-        _xcodePath = pathResult.stdout.trim();
+        // Verify xcode-select path is configured
+        await runCommand('xcode-select', ['-p']);
       } catch {
         issues.push('Xcode not found or not properly configured');
       }
@@ -486,13 +494,13 @@ export class SimulatorDispatcher extends BaseDispatcher<
   }
 
   private async executeGetAppContainer(
-    params: Partial<GetAppContainerParams>
+    _params: Partial<GetAppContainerParams>
   ): Promise<OperationResult<SimulatorResultData>> {
-    // Placeholder
+    // TODO: Implement app container path retrieval
     const data: AppLifecycleResultData = {
       message: 'Get app container operation not yet implemented',
-      sub_operation: 'install',
-      params: params as never,
+      sub_operation: 'get-container',
+      note: 'App container path retrieval will be implemented',
     };
     return this.formatSuccess(data);
   }

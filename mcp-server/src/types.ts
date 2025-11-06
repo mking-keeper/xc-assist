@@ -216,6 +216,8 @@ export interface AppLifecycleResultData {
   params?: AppLifecycleParams;
   status?: string;
   app_identifier?: string;
+  pid?: string;
+  note?: string;
 }
 
 export interface ListResultData {
