@@ -2,6 +2,34 @@
 
 This document provides essential context for Claude Code when working on the xclaude-plugin MCP server codebase.
 
+## ⚠️ CRITICAL: MCP Tool Usage Enforcement for Claude Instances
+
+**When Claude instances use this plugin, they MUST use the MCP tools. They should NEVER fall back to bash for iOS development tasks.**
+
+### For Plugin Users (Claude Instances)
+
+**Enforce this behavior in Skills:**
+
+1. **xcode-workflows** - Must guide users to `execute_xcode_command`, never bash `xcodebuild`
+2. **simulator-workflows** - Must guide users to `execute_simulator_command`, never bash `xcrun simctl`
+3. **ui-automation-workflows** - Must guide users to `execute_idb_command`, never bash `idb`
+
+### Implementation Details
+
+- Skills must have prominent "CRITICAL" sections explaining MCP tool priority
+- Skills must show "When to Use Bash" tables with ❌ WRONG and ✅ RIGHT examples
+- Skills must explicitly state the 3 operations: "Invoke the `execute_*_command` MCP tool"
+- Skills must have failure handling that says "retry with adjusted parameters"
+- All three tools must be referenced by their full MCP name
+
+### For Server Developers (You)
+
+When implementing dispatcher methods:
+
+- Ensure proper error messages that guide users to fix parameters
+- Return structured JSON responses with clear guidance
+- Document all parameters that could be tuned if operations fail
+
 ## Project Overview
 
 **xclaude-plugin MCP Server** is a consolidated Model Context Protocol server for iOS development automation. It provides 22 operations across 3 dispatchers (Xcode, Simulator, IDB) with ~2.2k tokens at rest through progressive disclosure architecture.

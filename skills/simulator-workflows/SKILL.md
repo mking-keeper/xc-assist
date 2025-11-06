@@ -9,6 +9,47 @@ description: iOS Simulator device and app management with simctl. Use when manag
 
 The xclaude-plugin provides the `execute_simulator_command` MCP tool which consolidates all simctl operations into a single, token-efficient dispatcher.
 
+## ⚠️ CRITICAL: Always Use MCP Tools First
+
+**This is the most important rule:** When working with iOS simulators, you MUST use the `execute_simulator_command` MCP tool.
+
+- ✅ **DO**: Invoke `execute_simulator_command` for all device/app lifecycle operations
+- ✅ **DO**: If the MCP tool fails, adjust parameters and retry
+- ✅ **DO**: Read error messages and debug the parameters
+- ❌ **NEVER**: Fall back to bash `xcrun simctl` commands
+- ❌ **NEVER**: Use `simctl` directly in bash
+- ❌ **NEVER**: Run `xcrun simctl` commands in a terminal
+
+**Why?** The MCP tool provides:
+- Structured error handling
+- Token efficiency (consolidated into 1 tool vs. verbose bash output)
+- Proper integration with the xclaude-plugin architecture
+- Consistent response formatting
+
+If `execute_simulator_command` fails, the issue is with parameters or device state - not that you should use bash.
+
+## When to Use Bash (And When NOT to)
+
+### ❌ NEVER Use Bash For These (Use MCP Tools Instead)
+
+| Task | ❌ WRONG (Bash) | ✅ RIGHT (MCP Tool) |
+|------|---------------|-------------------|
+| List devices | `xcrun simctl list` | `execute_simulator_command` op: "list" |
+| Boot simulator | `xcrun simctl boot <UDID>` | `execute_simulator_command` op: "device-lifecycle" sub: "boot" |
+| Install app | `xcrun simctl install <UDID> <app.app>` | `execute_simulator_command` op: "app-lifecycle" sub: "install" |
+| Launch app | `xcrun simctl launch <UDID> <bundle-id>` | `execute_simulator_command` op: "app-lifecycle" sub: "launch" |
+| Screenshot | `xcrun simctl io <UDID> screenshot` | `execute_simulator_command` op: "io" sub: "screenshot" |
+
+### ✅ Bash is Acceptable For (Non-Simulator Tasks)
+
+- File operations: `mkdir`, `cp`, `rm`, `ls`, etc.
+- Text inspection: `grep`, `find`, `cat`, etc.
+- Git operations: `git status`, `git log`, etc.
+- Environment checks: `which`, `simctl --version`, etc.
+- Project exploration: `find . -name "*.app"`, etc.
+
+### The Rule: If it's about simulator management → Use MCP tool, not bash
+
 ## Quick Reference
 
 | Task | MCP Tool | Operation | Sub-Operation |

@@ -9,6 +9,25 @@ description: Accessibility-first UI automation using IDB. Query accessibility tr
 
 The xclaude-plugin provides the `execute_idb_command` MCP tool which consolidates all IDB UI automation operations into a single, token-efficient dispatcher.
 
+## ⚠️ CRITICAL: Always Use MCP Tools First
+
+**This is the most important rule:** When automating UI interactions, you MUST use the `execute_idb_command` MCP tool.
+
+- ✅ **DO**: Invoke `execute_idb_command` for all UI automation, element finding, and accessibility queries
+- ✅ **DO**: If the MCP tool fails, adjust parameters and retry
+- ✅ **DO**: Read error messages and debug the parameters
+- ❌ **NEVER**: Fall back to bash `idb` commands
+- ❌ **NEVER**: Use `idb` directly in bash
+- ❌ **NEVER**: Run `idb` commands in a terminal
+
+**Why?** The MCP tool provides:
+- Structured error handling
+- Token efficiency (consolidated into 1 tool vs. verbose bash output)
+- Proper integration with the xclaude-plugin architecture
+- Accessibility-first patterns built-in
+
+If `execute_idb_command` fails, the issue is with parameters or app state - not that you should use bash.
+
 ## Core Principle: Accessibility Before Screenshots
 
 **Always query the accessibility tree first.** Only use screenshots as a fallback.

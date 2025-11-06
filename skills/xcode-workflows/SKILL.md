@@ -9,6 +9,47 @@ description: Xcode build system guidance for xcodebuild operations. Use when bui
 
 The xclaude-plugin provides the `execute_xcode_command` MCP tool which consolidates all xcodebuild operations into a single, token-efficient dispatcher.
 
+## ⚠️ CRITICAL: Always Use MCP Tools First
+
+**This is the most important rule:** When working with iOS builds, you MUST use the `execute_xcode_command` MCP tool.
+
+- ✅ **DO**: Invoke `execute_xcode_command` for all build/test/clean operations
+- ✅ **DO**: If the MCP tool fails, adjust parameters and retry
+- ✅ **DO**: Read error messages and debug the parameters
+- ❌ **NEVER**: Fall back to bash `xcodebuild` commands
+- ❌ **NEVER**: Use `xcodebuild` directly in bash
+- ❌ **NEVER**: Run `xcrun xcodebuild` in a terminal
+
+**Why?** The MCP tool provides:
+- Structured error handling
+- Token efficiency (consolidated into 1 tool vs. verbose bash output)
+- Proper integration with the xclaude-plugin architecture
+- Consistent response formatting
+
+If `execute_xcode_command` fails, the issue is with parameters or the project - not that you should use bash.
+
+## When to Use Bash (And When NOT to)
+
+### ❌ NEVER Use Bash For These (Use MCP Tools Instead)
+
+| Task | ❌ WRONG (Bash) | ✅ RIGHT (MCP Tool) |
+|------|---------------|-------------------|
+| List schemes | `xcodebuild -list` | `execute_xcode_command` op: "list" |
+| Build app | `xcodebuild -scheme...` | `execute_xcode_command` op: "build" |
+| Run tests | `xcodebuild -scheme... test` | `execute_xcode_command` op: "test" |
+| Clean build | `xcodebuild clean` | `execute_xcode_command` op: "clean" |
+| Get Xcode info | `xcodebuild -version` | `execute_xcode_command` op: "version" |
+
+### ✅ Bash is Acceptable For (Non-Build Tasks)
+
+- File operations: `mkdir`, `cp`, `rm`, `ls`, etc.
+- Text inspection: `grep`, `find`, `cat`, etc.
+- Git operations: `git status`, `git log`, etc.
+- Environment checks: `which`, `xcode-select --version`, etc.
+- Project exploration: `find . -name "*.swift"`, etc.
+
+### The Rule: If it's about Xcode building/testing → Use MCP tool, not bash
+
 ## Quick Reference
 
 | Task | MCP Tool | Operation | Key Parameters |

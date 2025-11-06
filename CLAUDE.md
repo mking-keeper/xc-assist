@@ -2,6 +2,47 @@
 
 This file provides essential guidance to Claude Code when working with the xclaude-plugin repository.
 
+## ⚠️ CRITICAL: MCP Tool Usage Enforcement
+
+**When working with xclaude-plugin, ALWAYS use the MCP tools. NEVER fall back to bash for iOS development tasks.**
+
+### The 3 MCP Tools You MUST Use
+
+1. **`execute_xcode_command`** - For ALL Xcode build/test operations
+   - ✅ DO: Use MCP tool for `xcodebuild` operations
+   - ❌ NEVER: Use bash `xcodebuild` directly
+
+2. **`execute_simulator_command`** - For ALL simulator management
+   - ✅ DO: Use MCP tool for `simctl` operations
+   - ❌ NEVER: Use bash `xcrun simctl` directly
+
+3. **`execute_idb_command`** - For ALL UI automation
+   - ✅ DO: Use MCP tool for `idb` operations
+   - ❌ NEVER: Use bash `idb` directly
+
+### If an MCP Tool Fails
+
+**The correct approach:**
+1. Read the error message carefully
+2. Adjust the parameters
+3. Retry the MCP tool with new parameters
+4. Ask the user for help if still stuck
+
+**The WRONG approach:**
+- ❌ Fall back to bash `xcodebuild`
+- ❌ Fall back to bash `xcrun simctl`
+- ❌ Fall back to bash `idb`
+
+### When Bash IS Acceptable
+
+- File operations: `mkdir`, `cp`, `rm`, `ls`, etc.
+- Text inspection: `grep`, `find`, `cat`, `head`, `tail`, etc.
+- Git operations: `git status`, `git log`, `git diff`, etc.
+- Environment checks: `which`, `xcode-select`, etc.
+- Project exploration: `find . -name "*.swift"`, etc.
+
+**But NEVER for iOS development tasks that have MCP equivalents.**
+
 ## Project Overview
 
 **xclaude-plugin** is a complete, feature-complete MCP (Model Context Protocol) plugin for iOS development automation. It consolidates iOS build, test, simulator control, and UI automation into 3 semantic dispatchers with minimal token overhead.
