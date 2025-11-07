@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "xc-setup": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-servers/xc-setup/dist/index.js"],
+      "env": {
+        "XC_LOG_LEVEL": "info"
+      }
+    },
+    "xc-compile": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-servers/xc-compile/dist/index.js"],
+      "env": {
+        "XC_LOG_LEVEL": "info"
+      }
+    }
+  }
+}
