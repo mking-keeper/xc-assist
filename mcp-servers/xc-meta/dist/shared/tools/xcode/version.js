@@ -56,4 +56,3 @@ export async function xcodeVersion(params) {
         };
     }
 }
-//# sourceMappingURL=version.js.map

@@ -76,4 +76,3 @@ export async function simulatorList(params) {
         };
     }
 }
-//# sourceMappingURL=list.js.map

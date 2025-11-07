@@ -64,4 +64,3 @@ class XCSetupServer {
 }
 const server = new XCSetupServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

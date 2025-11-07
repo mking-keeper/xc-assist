@@ -150,4 +150,3 @@ export async function idbGesture(params) {
         };
     }
 }
-//# sourceMappingURL=gesture.js.map

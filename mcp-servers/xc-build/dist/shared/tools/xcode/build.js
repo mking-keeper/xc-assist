@@ -100,4 +100,3 @@ export async function xcodeBuild(params) {
         };
     }
 }
-//# sourceMappingURL=build.js.map

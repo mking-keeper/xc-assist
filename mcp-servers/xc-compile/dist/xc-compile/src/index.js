@@ -46,4 +46,3 @@ class XCCompileServer {
 }
 const server = new XCCompileServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

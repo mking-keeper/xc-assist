@@ -63,4 +63,3 @@ export async function simulatorTerminateApp(params) {
         };
     }
 }
-//# sourceMappingURL=terminate-app.js.map

@@ -54,4 +54,3 @@ class XCBuildServer {
 }
 const server = new XCBuildServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

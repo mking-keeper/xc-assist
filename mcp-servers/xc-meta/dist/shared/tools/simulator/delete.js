@@ -58,4 +58,3 @@ export async function simulatorDelete(params) {
         };
     }
 }
-//# sourceMappingURL=delete.js.map

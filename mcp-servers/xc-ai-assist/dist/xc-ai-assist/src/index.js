@@ -86,4 +86,3 @@ class XCAIAssistServer {
 }
 const server = new XCAIAssistServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

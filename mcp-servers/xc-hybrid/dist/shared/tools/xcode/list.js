@@ -78,4 +78,3 @@ export async function xcodeList(params) {
         };
     }
 }
-//# sourceMappingURL=list.js.map

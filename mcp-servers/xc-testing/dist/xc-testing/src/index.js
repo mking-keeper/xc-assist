@@ -70,4 +70,3 @@ class XCTestingServer {
 }
 const server = new XCTestingServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

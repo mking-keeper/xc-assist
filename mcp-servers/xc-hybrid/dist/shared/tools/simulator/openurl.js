@@ -64,4 +64,3 @@ export async function simulatorOpenURL(params) {
         };
     }
 }
-//# sourceMappingURL=openurl.js.map

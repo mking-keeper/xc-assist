@@ -58,4 +58,3 @@ export async function simulatorScreenshot(params) {
         };
     }
 }
-//# sourceMappingURL=screenshot.js.map

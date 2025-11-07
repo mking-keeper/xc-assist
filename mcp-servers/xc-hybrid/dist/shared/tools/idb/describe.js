@@ -96,4 +96,3 @@ export async function idbDescribe(params) {
         };
     }
 }
-//# sourceMappingURL=describe.js.map

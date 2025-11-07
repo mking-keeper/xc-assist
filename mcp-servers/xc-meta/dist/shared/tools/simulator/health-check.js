@@ -65,4 +65,3 @@ export async function simulatorHealthCheck(_params) {
         };
     }
 }
-//# sourceMappingURL=health-check.js.map

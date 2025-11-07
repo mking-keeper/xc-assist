@@ -66,4 +66,3 @@ export async function simulatorInstallApp(params) {
         };
     }
 }
-//# sourceMappingURL=install-app.js.map

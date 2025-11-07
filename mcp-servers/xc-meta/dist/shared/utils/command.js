@@ -133,4 +133,3 @@ export function extractBuildErrors(output, maxLines = 10) {
     }
     return errors;
 }
-//# sourceMappingURL=command.js.map

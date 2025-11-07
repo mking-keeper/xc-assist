@@ -77,4 +77,3 @@ export async function simulatorGetAppContainer(params) {
         };
     }
 }
-//# sourceMappingURL=get-app-container.js.map

@@ -70,4 +70,3 @@ export async function simulatorLaunchApp(params) {
         };
     }
 }
-//# sourceMappingURL=launch-app.js.map

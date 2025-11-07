@@ -149,4 +149,3 @@ class XCHybridServer {
 }
 const server = new XCHybridServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

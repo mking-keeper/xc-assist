@@ -58,4 +58,3 @@ export async function simulatorShutdown(params) {
         };
     }
 }
-//# sourceMappingURL=shutdown.js.map

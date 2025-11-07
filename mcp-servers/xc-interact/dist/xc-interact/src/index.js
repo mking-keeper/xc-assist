@@ -68,4 +68,3 @@ class XCInteractServer {
 }
 const server = new XCInteractServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map

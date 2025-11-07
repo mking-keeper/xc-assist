@@ -68,4 +68,3 @@ class XCMetaServer {
 }
 const server = new XCMetaServer();
 server.run().catch(console.error);
-//# sourceMappingURL=index.js.map
