@@ -10,7 +10,8 @@ Build, test, and automate iOS apps through natural conversation with Claude. 8 w
 
 Tools are grouped into MCPs - you enable the ones you're currently need and disable others to optimise context. I still need to revise and optimise the groupings.
 
-<img width="639" height="135" alt="Screenshot 2025-11-08 at 10 36 37" src="https://github.com/user-attachments/assets/0fd89449-7c2c-4f37-bfae-e346be82e579" />
+<img width="1278" height="407" alt="Screenshot 2025-11-08 at 10 44 28" src="https://github.com/user-attachments/assets/ff1c0a09-f29d-4a86-a280-97b3bbc8c635" />
+
 
 
 ## Features
