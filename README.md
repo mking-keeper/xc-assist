@@ -308,7 +308,6 @@ When you encounter a task that could use either approach, **always choose the pl
 # Manual build parsing
 xcodebuild -scheme MyApp 2>&1 | grep -A5 "error:" | sed ...
 ```
-````
 
 **Do this instead:** Use the `xcode_build` tool from `xc-compile` MCP.
 
@@ -376,6 +375,7 @@ npm run build
 # Test locally
 /plugin marketplace add /path/to/xclaude-plugin
 /plugin install xclaude-plugin
+````
 ````
 
 ### Project Structure
