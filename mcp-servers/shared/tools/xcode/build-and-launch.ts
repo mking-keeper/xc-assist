@@ -150,19 +150,105 @@ async function formatSimulatorSuggestions(): Promise<string> {
 }
 
 /**
- * Ensure simulator is running and return its UDID
+ * Extract UDID from destination string
+ * Handles both "id=UDID" and "platform=...,name=...,OS=..." formats
  */
-async function ensureSimulatorRunning(destination: string): Promise<string> {
-  // Extract UDID from destination
+async function extractUdidFromDestination(
+  destination: string,
+): Promise<string> {
+  // Format 1: id=UDID
   const udidMatch = destination.match(/id=([A-Za-z0-9-]+)/);
-  if (!udidMatch) {
+  if (udidMatch) {
+    return udidMatch[1];
+  }
+
+  // Format 2: platform=iOS Simulator,name=iPhone 15,OS=18.0
+  const nameMatch = destination.match(/name=([^,]+)/);
+  const osMatch = destination.match(/OS=([^,]+)/);
+
+  if (!nameMatch) {
     const suggestions = await formatSimulatorSuggestions();
     throw new Error(
-      `Could not extract simulator UDID from destination.\n\n${suggestions}`,
+      `Could not extract device name or UDID from destination "${destination}".\n\n${suggestions}`,
     );
   }
 
-  const udid = udidMatch[1];
+  const deviceName = nameMatch[1].trim();
+  const osVersion = osMatch ? osMatch[1].trim() : undefined;
+
+  // Query simulators to find matching UDID using JSON output for robustness
+  const listResult = await runCommand("xcrun", [
+    "simctl",
+    "list",
+    "devices",
+    "available",
+    "--json",
+  ]);
+
+  if (listResult.code !== 0) {
+    throw new Error(`Failed to query simulators: ${listResult.stderr}`);
+  }
+
+  // Parse JSON output
+  let devices: Record<
+    string,
+    Array<{ name: string; udid: string; state: string }>
+  >;
+  try {
+    const parsed = JSON.parse(listResult.stdout);
+    devices = parsed.devices || {};
+  } catch (error) {
+    throw new Error(
+      `Failed to parse simulator list: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  // Find matching device
+  let foundUdid: string | null = null;
+
+  for (const [runtime, deviceList] of Object.entries(devices)) {
+    // Extract OS version from runtime string (e.g., "iOS-18-0" -> "18.0" or "iOS-18-0-1" -> "18.0.1")
+    const runtimeMatch = runtime.match(/iOS-(\d+(?:-\d+)*)/);
+    if (!runtimeMatch) continue;
+
+    const currentOSVersion = runtimeMatch[1].replace(/-/g, ".");
+
+    for (const device of deviceList) {
+      // Only consider available devices (Shutdown or Booted)
+      if (device.state !== "Shutdown" && device.state !== "Booted") {
+        continue;
+      }
+
+      // Check if name matches
+      if (device.name === deviceName) {
+        // If OS version specified, must match; otherwise take first available
+        if (!osVersion || currentOSVersion === osVersion) {
+          foundUdid = device.udid;
+          break;
+        }
+      }
+    }
+
+    if (foundUdid) break;
+  }
+
+  if (!foundUdid) {
+    const suggestions = await formatSimulatorSuggestions();
+    const osInfo = osVersion ? ` with OS ${osVersion}` : "";
+    throw new Error(
+      `Could not find simulator "${deviceName}"${osInfo}.\n\n${suggestions}`,
+    );
+  }
+
+  return foundUdid;
+}
+
+/**
+ * Ensure simulator is running and return its UDID
+ */
+async function ensureSimulatorRunning(destination: string): Promise<string> {
+  // Extract UDID from destination (handles both id= and platform= formats)
+  const udid = await extractUdidFromDestination(destination);
 
   // Check if simulator is running
   const listResult = await runCommand("xcrun", ["simctl", "list", "devices"]);
