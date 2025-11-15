@@ -23,8 +23,8 @@ Build, test, and automate iOS apps through natural conversation with Claude. 8 w
 
 ### 🔥 Surgical MCPs (Ultra-Focused)
 
-- **xc-build** (~600 tokens) - Build, clean, list schemes
-- **xc-run** (~800 tokens) - Build, build+run, clean (rapid development)
+- **xc-build** (~600 tokens) - Build validation, errors, clean, list schemes
+- **xc-build-and-launch** (~750 tokens) - Build, install, launch on simulator
 - **xc-interact** (~900 tokens) - Pure UI interaction, no build
 
 ### 📦 Core Workflow MCPs
@@ -67,15 +67,15 @@ Build, test, and automate iOS apps through natural conversation with Claude. 8 w
 
 ## First 60 Seconds
 
-Just installed? Enable **xc-run** and build your app:
+Just installed? Enable **xc-build-and-launch** and build your app:
 
 ```
-1. In Claude settings, enable the "xc-run" MCP only
+1. In Claude settings, enable the "xc-build-and-launch" MCP only
 2. Ask Claude: "Build and run MyApp on iPhone 15"
 3. Done! ✨
 ```
 
-That's it. **xc-run** includes everything for rapid development: build, clean, and install+launch. If you need other workflows (testing, setup, UI automation), see **Choosing the Right MCP** below.
+That's it. **xc-build-and-launch** is purpose-built for rapid development: build, install, and launch. If you need other workflows (testing, setup, UI automation), see **Choosing the Right MCP** below.
 
 ## Requirements
 
@@ -91,14 +91,14 @@ That's it. **xc-run** includes everything for rapid development: build, clean, a
 **IMPORTANT**: Enable **ONE MCP at a time** for optimal token efficiency. Choose based on your current workflow:
 
 ```
-☐ xc-build          # Building, cleaning, listing schemes? (~600 tokens)
-☐ xc-run            # Rapid dev: build & install & launch? (~800 tokens)
-☐ xc-interact       # Testing UI with app already built? (~900 tokens)
-☐ xc-ai-assist      # AI-driven UI iteration? (~1400 tokens)
-☐ xc-setup          # First time setup? (~800 tokens)
-☐ xc-testing        # Running test suites? (~1200 tokens)
-☐ xc-meta           # Maintenance tasks? (~700 tokens)
-☐ xc-all            # Complex workflow needing everything? (~3500 tokens)
+☐ xc-build                # Build validation, errors, clean? (~600 tokens)
+☐ xc-build-and-launch     # Build & install & launch app? (~750 tokens)
+☐ xc-interact             # Testing UI with app already built? (~900 tokens)
+☐ xc-ai-assist            # AI-driven UI iteration? (~1400 tokens)
+☐ xc-setup                # First time setup? (~800 tokens)
+☐ xc-testing              # Running test suites? (~1200 tokens)
+☐ xc-meta                 # Maintenance tasks? (~700 tokens)
+☐ xc-all                  # Complex workflow needing everything? (~3500 tokens)
 ```
 
 ### Example Workflows
@@ -115,7 +115,19 @@ Enable: xc-build (~600 tokens)
 → 87% less tokens than old architecture!
 ```
 
-**Scenario 2: Testing UI flows (app already built)**
+**Scenario 2: Rapid development - build and run**
+
+```
+Enable: xc-build-and-launch (~750 tokens)
+
+"Build and run MyApp on iPhone 15"
+
+→ Compiles code, installs app, launches on simulator
+→ One command for the full workflow
+→ Perfect for iterative development
+```
+
+**Scenario 3: Testing UI flows (app already built)**
 
 ```
 Enable: xc-interact (~900 tokens)
@@ -127,7 +139,7 @@ Enable: xc-interact (~900 tokens)
 → Validates UI state without rebuilding
 ```
 
-**Scenario 3: AI-driven UI iteration**
+**Scenario 4: AI-driven UI iteration**
 
 ```
 Enable: xc-ai-assist (~1400 tokens)
@@ -153,14 +165,14 @@ Enable: xc-ai-assist (~1400 tokens)
          ↓ Tools imported by MCP servers ↓
 ┌─────────────────────────────────────────────────────┐
 │  8 Workflow-Specific MCP Servers                    │
-│  ├─ xc-build:       3 tools   (~600 tokens)        │
-│  ├─ xc-run:         4 tools   (~800 tokens)        │
-│  ├─ xc-interact:    6 tools   (~900 tokens)        │
-│  ├─ xc-ai-assist:   7 tools   (~1400 tokens)       │
-│  ├─ xc-setup:       5 tools   (~800 tokens)        │
-│  ├─ xc-testing:     6 tools   (~1200 tokens)       │
-│  ├─ xc-meta:        6 tools   (~700 tokens)        │
-│  └─ xc-all:         23 tools  (~3500 tokens)       │
+│  ├─ xc-build:            3 tools   (~600 tokens)   │
+│  ├─ xc-build-and-launch: 3 tools   (~750 tokens)   │
+│  ├─ xc-interact:         6 tools   (~900 tokens)   │
+│  ├─ xc-ai-assist:        7 tools   (~1400 tokens)  │
+│  ├─ xc-setup:            5 tools   (~800 tokens)   │
+│  ├─ xc-testing:          6 tools   (~1200 tokens)  │
+│  ├─ xc-meta:             6 tools   (~700 tokens)   │
+│  └─ xc-all:              23 tools  (~3500 tokens)  │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -185,10 +197,10 @@ Enable: xc-ai-assist (~1400 tokens)
 ### 🔥 Surgical MCPs
 
 | MCP             | Tools | Token Cost | Use When                                               |
-| --------------- | ----- | ---------- | ------------------------------------------------------ |
-| **xc-build**    | 3     | ~600       | Build validation with clean/scheme discovery            |
-| **xc-run**      | 4     | ~800       | Rapid development: build + install + launch            |
-| **xc-interact** | 6     | ~900       | Testing UI flows with app already built                |
+| ---------------------- | ----- | ---------- | ------------------------------------------------------ |
+| **xc-build**           | 3     | ~600       | Build validation with clean/scheme discovery            |
+| **xc-build-and-launch**| 3     | ~750       | Rapid development: build + install + launch            |
+| **xc-interact**        | 6     | ~900       | Testing UI flows with app already built                |
 
 ### 📦 Core Workflow MCPs
 
@@ -432,7 +444,7 @@ See `.xcplugin.example` in the plugin directory for a complete example.
 
 - **Token efficiency**: xc-build is 83% cheaper than loading all 23 tools
 - **Mental clarity**: One focused set of tools per workflow phase
-- **No duplication**: Multiple MCPs would provide duplicate tools
+- **No duplication**: xc-build and xc-build-and-launch don't overlap; choose one based on your task
 
 Switch MCPs as your workflow changes. If you find yourself needing tools from multiple MCPs, use `xc-all` instead.
 
@@ -464,19 +476,19 @@ xclaude-plugin/
 ├── .claude-plugin/
 │   ├── plugin.json           # Plugin manifest (8 MCP servers)
 │   └── marketplace.json      # Marketplace configuration
-├── mcp-servers/              # 8 modular MCP servers
-│   ├── shared/               # Shared tool library (23 tools)
-│   │   ├── tools/            # Tool implementations
-│   │   ├── types/            # Shared type definitions
-│   │   └── utils/            # Command execution utilities
-│   ├── xc-build/             # MCP 1: Build validation
-│   ├── xc-run/               # MCP 2: Rapid development
-│   ├── xc-interact/          # MCP 3: Pure UI interaction
-│   ├── xc-ai-assist/         # MCP 4: AI UI automation
-│   ├── xc-setup/             # MCP 5: Environment setup
-│   ├── xc-testing/           # MCP 6: Test execution
-│   ├── xc-meta/              # MCP 7: Maintenance
-│   └── xc-all/               # MCP 8: Full toolkit
+├── mcp-servers/                   # 8 modular MCP servers
+│   ├── shared/                    # Shared tool library (23 tools)
+│   │   ├── tools/                 # Tool implementations
+│   │   ├── types/                 # Shared type definitions
+│   │   └── utils/                 # Command execution utilities
+│   ├── xc-build/                  # MCP 1: Build validation
+│   ├── xc-build-and-launch/       # MCP 2: Build + install + launch
+│   ├── xc-interact/               # MCP 3: Pure UI interaction
+│   ├── xc-ai-assist/              # MCP 4: AI UI automation
+│   ├── xc-setup/                  # MCP 5: Environment setup
+│   ├── xc-testing/                # MCP 6: Test execution
+│   ├── xc-meta/                   # MCP 7: Maintenance
+│   └── xc-all/                    # MCP 8: Full toolkit
 ├── skills/                   # 8 Skills (markdown + YAML)
 │   ├── xcode-workflows/
 │   ├── simulator-workflows/
