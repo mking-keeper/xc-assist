@@ -65,6 +65,18 @@ Tools are grouped into MCPs - you enable the ones you're currently need and disa
 /plugin install xclaude-plugin
 ```
 
+## First 60 Seconds
+
+Just installed? Enable **xc-run** and build your app:
+
+```
+1. In Claude settings, enable the "xc-run" MCP only
+2. Ask Claude: "Build and run MyApp on iPhone 15"
+3. Done! ✨
+```
+
+That's it. **xc-run** includes everything for rapid development: build, clean, and install+launch. If you need other workflows (testing, setup, UI automation), see **Choosing the Right MCP** below.
+
 ## Requirements
 
 - macOS 13.0+ or Linux
@@ -72,7 +84,7 @@ Tools are grouped into MCPs - you enable the ones you're currently need and disa
 - Node.js 18+
 - Optional: IDB (Facebook iOS Development Bridge) for advanced UI automation
 
-## Quick Start
+## Choosing the Right MCP
 
 ### Enable the Right MCP for Your Task
 
@@ -148,7 +160,7 @@ Enable: xc-ai-assist (~1400 tokens)
 │  ├─ xc-setup:       5 tools   (~800 tokens)        │
 │  ├─ xc-testing:     6 tools   (~1200 tokens)       │
 │  ├─ xc-meta:        6 tools   (~700 tokens)        │
-│  └─ xc-all:         24 tools  (~3500 tokens)       │
+│  └─ xc-all:         23 tools  (~3500 tokens)       │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -182,7 +194,6 @@ Enable: xc-ai-assist (~1400 tokens)
 
 | MCP              | Tools | Token Cost | Use When                                      |
 | ---------------- | ----- | ---------- | --------------------------------------------- |
-| **xc-build**     | 3     | ~600       | Build validation + clean + scheme discovery   |
 | **xc-ai-assist** | 7     | ~1400      | AI UI iteration with visual feedback          |
 | **xc-setup**     | 5     | ~800       | Initial setup, environment validation         |
 | **xc-testing**   | 6     | ~1200      | Running test suites + UI automation           |
@@ -238,7 +249,7 @@ Add this section to your project's `.claude/CLAUDE.md` file. This guides Claude 
 ```markdown
 ## xclaude-plugin: Why and When to Use These Tools
 
-The xclaude-plugin provides 8 modular MCPs with 22 specialized iOS tools. **Always prefer these over raw `xcodebuild` or shell commands** for iOS development tasks. Here's why:
+The xclaude-plugin provides 8 modular MCPs with 23 specialized iOS tools. **Always prefer these over raw `xcodebuild` or shell commands** for iOS development tasks. Here's why:
 
 ### Why These Tools Trump Raw Commands
 
@@ -419,11 +430,11 @@ See `.xcplugin.example` in the plugin directory for a complete example.
 
 ## Why Enable ONE MCP at a Time
 
-- **Token efficiency**: xc-build is 83% cheaper than loading all 22 tools
+- **Token efficiency**: xc-build is 83% cheaper than loading all 23 tools
 - **Mental clarity**: One focused set of tools per workflow phase
 - **No duplication**: Multiple MCPs would provide duplicate tools
 
-Switch MCPs as your workflow changes. If you find yourself needing tools from multiple MCPs, use `xc-hybrid` instead.
+Switch MCPs as your workflow changes. If you find yourself needing tools from multiple MCPs, use `xc-all` instead.
 
 
 ## Development
