@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Terminate App Tool
  *
  * Terminate a running app
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorTerminateAppDefinition = void 0;
-exports.simulatorTerminateApp = simulatorTerminateApp;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorTerminateAppDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const simulatorTerminateAppDefinition = {
     name: 'simulator_terminate_app',
     description: 'Terminate a running app on simulator',
     inputSchema: {
@@ -27,7 +23,7 @@ exports.simulatorTerminateAppDefinition = {
         required: ['app_identifier'],
     },
 };
-async function simulatorTerminateApp(params) {
+export async function simulatorTerminateApp(params) {
     try {
         if (!params.app_identifier) {
             return {
@@ -37,8 +33,8 @@ async function simulatorTerminateApp(params) {
             };
         }
         const deviceId = params.device_id || 'booted';
-        logger_js_1.logger.info(`Terminating app ${params.app_identifier} on ${deviceId}`);
-        const result = await (0, command_js_1.runCommand)('xcrun', ['simctl', 'terminate', deviceId, params.app_identifier]);
+        logger.info(`Terminating app ${params.app_identifier} on ${deviceId}`);
+        const result = await runCommand('xcrun', ['simctl', 'terminate', deviceId, params.app_identifier]);
         const data = {
             message: 'App terminated successfully',
             app_identifier: params.app_identifier,
@@ -59,7 +55,7 @@ async function simulatorTerminateApp(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Terminate app failed', error);
+        logger.error('Terminate app failed', error);
         return {
             success: false,
             error: String(error),

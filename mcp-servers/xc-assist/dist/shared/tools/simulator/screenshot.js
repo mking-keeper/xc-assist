@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Screenshot Tool
  *
  * Capture simulator screenshot
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorScreenshotDefinition = void 0;
-exports.simulatorScreenshot = simulatorScreenshot;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorScreenshotDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const simulatorScreenshotDefinition = {
     name: 'simulator_screenshot',
     description: 'Capture simulator screenshot',
     inputSchema: {
@@ -26,13 +22,13 @@ exports.simulatorScreenshotDefinition = {
         },
     },
 };
-async function simulatorScreenshot(params) {
+export async function simulatorScreenshot(params) {
     try {
         const deviceId = params.device_id || 'booted';
         const outputPath = params.output_path || `/tmp/screenshot-${Date.now()}.png`;
         // Execute screenshot command
-        logger_js_1.logger.info(`Capturing screenshot from ${deviceId}`);
-        const result = await (0, command_js_1.runCommand)('xcrun', ['simctl', 'io', deviceId, 'screenshot', outputPath]);
+        logger.info(`Capturing screenshot from ${deviceId}`);
+        const result = await runCommand('xcrun', ['simctl', 'io', deviceId, 'screenshot', outputPath]);
         const data = {
             message: 'Screenshot captured successfully',
             output_path: outputPath,
@@ -54,7 +50,7 @@ async function simulatorScreenshot(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Screenshot failed', error);
+        logger.error('Screenshot failed', error);
         return {
             success: false,
             error: String(error),

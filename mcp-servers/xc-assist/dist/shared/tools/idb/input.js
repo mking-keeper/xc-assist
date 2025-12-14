@@ -1,15 +1,11 @@
-"use strict";
 /**
  * IDB Input Tool
  *
  * Type text or press keys
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.idbInputDefinition = void 0;
-exports.idbInput = idbInput;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.idbInputDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const idbInputDefinition = {
     name: 'idb_input',
     description: 'Type text or press keys in simulator',
     inputSchema: {
@@ -35,7 +31,7 @@ exports.idbInputDefinition = {
         },
     },
 };
-async function idbInput(params) {
+export async function idbInput(params) {
     try {
         // Validation
         if (!params.text && !params.key && !params.key_sequence) {
@@ -49,18 +45,18 @@ async function idbInput(params) {
         let result;
         // Type text
         if (params.text) {
-            logger_js_1.logger.info(`Typing text: ${params.text}`);
-            result = await (0, command_js_1.runCommand)('idb', ['ui', 'text', params.text, '--target', target]);
+            logger.info(`Typing text: ${params.text}`);
+            result = await runCommand('idb', ['ui', 'text', params.text, '--target', target]);
         }
         // Press single key
         else if (params.key) {
-            logger_js_1.logger.info(`Pressing key: ${params.key}`);
-            result = await (0, command_js_1.runCommand)('idb', ['ui', 'key', params.key, '--target', target]);
+            logger.info(`Pressing key: ${params.key}`);
+            result = await runCommand('idb', ['ui', 'key', params.key, '--target', target]);
         }
         // Press key sequence
         else if (params.key_sequence) {
-            logger_js_1.logger.info(`Pressing key sequence: ${params.key_sequence.join(', ')}`);
-            result = await (0, command_js_1.runCommand)('idb', [
+            logger.info(`Pressing key sequence: ${params.key_sequence.join(', ')}`);
+            result = await runCommand('idb', [
                 'ui',
                 'key-sequence',
                 ...params.key_sequence,
@@ -95,7 +91,7 @@ async function idbInput(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Input failed', error);
+        logger.error('Input failed', error);
         return {
             success: false,
             error: String(error),

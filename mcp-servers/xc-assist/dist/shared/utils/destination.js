@@ -1,15 +1,10 @@
-"use strict";
 /**
  * Destination resolver utilities for xcodebuild operations.
  * Handles auto-resolution of incomplete destination strings by querying available simulators.
  * Integrates with config system to track usage and provide defaults.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateDestination = validateDestination;
-exports.resolveDestination = resolveDestination;
-exports.listAvailableSimulators = listAvailableSimulators;
-const command_js_1 = require("./command.js");
-const config_js_1 = require("./config.js");
+import { runCommand } from "./command.js";
+import { saveUsage } from "./config.js";
 /**
  * Parse simctl list output to extract available simulator devices.
  *
@@ -88,7 +83,7 @@ function findBestMatch(deviceName, devices) {
  */
 async function queryAvailableSimulators() {
     try {
-        const result = await (0, command_js_1.runCommand)("xcrun", [
+        const result = await runCommand("xcrun", [
             "simctl",
             "list",
             "devices",
@@ -109,7 +104,7 @@ async function queryAvailableSimulators() {
  * @param destination - Destination string to validate
  * @returns Validation result with any warnings
  */
-function validateDestination(destination) {
+export function validateDestination(destination) {
     // Check for empty string
     if (!destination.trim()) {
         return {
@@ -172,13 +167,13 @@ function validateDestination(destination) {
  * await resolveDestination("id=ABC-123-DEF")
  * // Returns: "id=ABC-123-DEF"
  */
-async function resolveDestination(destination, projectPath) {
+export async function resolveDestination(destination, projectPath) {
     // Validate first
     const validation = validateDestination(destination);
     // If destination already includes OS version or is using UDID, pass through and track
     if (destination.includes("OS=") || destination.includes("id=")) {
         // Track usage for explicit destinations
-        await (0, config_js_1.saveUsage)(destination, projectPath).catch((error) => {
+        await saveUsage(destination, projectPath).catch((error) => {
             // Non-critical - log but don't fail
             console.warn(`Failed to track usage: ${error instanceof Error ? error.message : String(error)}`);
         });
@@ -217,7 +212,7 @@ async function resolveDestination(destination, projectPath) {
         // Append OS version to destination
         const resolvedDestination = `${destination},OS=${bestMatch.osVersion}`;
         // Track usage for successfully resolved destination
-        await (0, config_js_1.saveUsage)(resolvedDestination, projectPath).catch((error) => {
+        await saveUsage(resolvedDestination, projectPath).catch((error) => {
             // Non-critical - log but don't fail
             console.warn(`Failed to track usage: ${error instanceof Error ? error.message : String(error)}`);
         });
@@ -242,6 +237,6 @@ async function resolveDestination(destination, projectPath) {
  *
  * @returns Array of available simulator devices
  */
-async function listAvailableSimulators() {
+export async function listAvailableSimulators() {
     return queryAvailableSimulators();
 }

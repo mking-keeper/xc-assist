@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Get App Container Tool
  *
  * Get filesystem path to app container
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorGetAppContainerDefinition = void 0;
-exports.simulatorGetAppContainer = simulatorGetAppContainer;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorGetAppContainerDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const simulatorGetAppContainerDefinition = {
     name: 'simulator_get_app_container',
     description: 'Get app container filesystem path',
     inputSchema: {
@@ -32,7 +28,7 @@ exports.simulatorGetAppContainerDefinition = {
         required: ['app_identifier'],
     },
 };
-async function simulatorGetAppContainer(params) {
+export async function simulatorGetAppContainer(params) {
     try {
         if (!params.app_identifier) {
             return {
@@ -43,8 +39,8 @@ async function simulatorGetAppContainer(params) {
         }
         const deviceId = params.device_id || 'booted';
         const containerType = params.container_type || 'data';
-        logger_js_1.logger.info(`Getting ${containerType} container for ${params.app_identifier}`);
-        const result = await (0, command_js_1.runCommand)('xcrun', [
+        logger.info(`Getting ${containerType} container for ${params.app_identifier}`);
+        const result = await runCommand('xcrun', [
             'simctl',
             'get_app_container',
             deviceId,
@@ -73,7 +69,7 @@ async function simulatorGetAppContainer(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Get app container failed', error);
+        logger.error('Get app container failed', error);
         return {
             success: false,
             error: String(error),

@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Launch App Tool
  *
  * Launch an app on simulator
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorLaunchAppDefinition = void 0;
-exports.simulatorLaunchApp = simulatorLaunchApp;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorLaunchAppDefinition = {
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
+export const simulatorLaunchAppDefinition = {
     name: "simulator_launch_app",
     description: "Launch app on simulator",
     inputSchema: {
@@ -45,7 +41,7 @@ exports.simulatorLaunchAppDefinition = {
  * });
  * ```
  */
-async function simulatorLaunchApp(params) {
+export async function simulatorLaunchApp(params) {
     try {
         // Validation
         if (!params.app_identifier) {
@@ -57,8 +53,8 @@ async function simulatorLaunchApp(params) {
         }
         const deviceId = params.device_id || "booted";
         // Execute launch command
-        logger_js_1.logger.info(`Launching app ${params.app_identifier} on ${deviceId}`);
-        const result = await (0, command_js_1.runCommand)("xcrun", [
+        logger.info(`Launching app ${params.app_identifier} on ${deviceId}`);
+        const result = await runCommand("xcrun", [
             "simctl",
             "launch",
             deviceId,
@@ -90,7 +86,7 @@ async function simulatorLaunchApp(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error("Launch app failed", error);
+        logger.error("Launch app failed", error);
         return {
             success: false,
             error: `Launch failed: ${String(error)}`,

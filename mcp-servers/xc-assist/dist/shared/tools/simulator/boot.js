@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Boot Tool
  *
  * Boot a simulator device
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorBootDefinition = void 0;
-exports.simulatorBoot = simulatorBoot;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorBootDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const simulatorBootDefinition = {
     name: 'simulator_boot',
     description: 'Boot a simulator device',
     inputSchema: {
@@ -23,7 +19,7 @@ exports.simulatorBootDefinition = {
         required: ['device_id'],
     },
 };
-async function simulatorBoot(params) {
+export async function simulatorBoot(params) {
     try {
         // Validation
         if (!params.device_id) {
@@ -34,8 +30,8 @@ async function simulatorBoot(params) {
             };
         }
         // Execute boot command
-        logger_js_1.logger.info(`Booting simulator: ${params.device_id}`);
-        const result = await (0, command_js_1.runCommand)('xcrun', ['simctl', 'boot', params.device_id]);
+        logger.info(`Booting simulator: ${params.device_id}`);
+        const result = await runCommand('xcrun', ['simctl', 'boot', params.device_id]);
         const data = {
             message: `Device booted successfully`,
             device_id: params.device_id,
@@ -57,7 +53,7 @@ async function simulatorBoot(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Boot failed', error);
+        logger.error('Boot failed', error);
         return {
             success: false,
             error: String(error),

@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator List Tool
  *
  * Enumerate available simulators
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorListDefinition = void 0;
-exports.simulatorList = simulatorList;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorListDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const simulatorListDefinition = {
     name: 'simulator_list',
     description: 'List available iOS simulators',
     inputSchema: {
@@ -31,11 +27,11 @@ exports.simulatorListDefinition = {
         },
     },
 };
-async function simulatorList(params) {
+export async function simulatorList(params) {
     try {
         // Execute simctl list
-        logger_js_1.logger.info('Listing simulators');
-        const result = await (0, command_js_1.runCommand)('xcrun', ['simctl', 'list', 'devices', '-j']);
+        logger.info('Listing simulators');
+        const result = await runCommand('xcrun', ['simctl', 'list', 'devices', '-j']);
         // Parse JSON output
         const json = JSON.parse(result.stdout);
         const devices = [];
@@ -72,7 +68,7 @@ async function simulatorList(params) {
         };
     }
     catch (error) {
-        logger_js_1.logger.error('List simulators failed', error);
+        logger.error('List simulators failed', error);
         return {
             success: false,
             error: String(error),

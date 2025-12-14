@@ -1,15 +1,11 @@
-"use strict";
 /**
  * IDB Gesture Tool
  *
  * Perform swipes and hardware button presses
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.idbGestureDefinition = void 0;
-exports.idbGesture = idbGesture;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.idbGestureDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const idbGestureDefinition = {
     name: 'idb_gesture',
     description: 'Perform swipe gestures or hardware button presses',
     inputSchema: {
@@ -53,7 +49,7 @@ exports.idbGestureDefinition = {
         required: ['gesture_type'],
     },
 };
-async function idbGesture(params) {
+export async function idbGesture(params) {
     try {
         const target = params.target || 'booted';
         if (params.gesture_type === 'swipe') {
@@ -69,8 +65,8 @@ async function idbGesture(params) {
                 };
             }
             const duration = params.duration || 200;
-            logger_js_1.logger.info(`Swiping from (${params.start_x}, ${params.start_y}) to (${params.end_x}, ${params.end_y})`);
-            const result = await (0, command_js_1.runCommand)('idb', [
+            logger.info(`Swiping from (${params.start_x}, ${params.start_y}) to (${params.end_x}, ${params.end_y})`);
+            const result = await runCommand('idb', [
                 'ui',
                 'swipe',
                 String(Math.round(params.start_x)),
@@ -110,8 +106,8 @@ async function idbGesture(params) {
                     operation: 'gesture',
                 };
             }
-            logger_js_1.logger.info(`Pressing button: ${params.button_type}`);
-            const result = await (0, command_js_1.runCommand)('idb', [
+            logger.info(`Pressing button: ${params.button_type}`);
+            const result = await runCommand('idb', [
                 'ui',
                 'button',
                 params.button_type,
@@ -146,7 +142,7 @@ async function idbGesture(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Gesture failed', error);
+        logger.error('Gesture failed', error);
         return {
             success: false,
             error: String(error),

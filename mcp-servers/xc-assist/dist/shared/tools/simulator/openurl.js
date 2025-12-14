@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Open URL Tool
  *
  * Open URL or deep link in simulator
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorOpenURLDefinition = void 0;
-exports.simulatorOpenURL = simulatorOpenURL;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorOpenURLDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const simulatorOpenURLDefinition = {
     name: 'simulator_openurl',
     description: 'Open URL or deep link in simulator',
     inputSchema: {
@@ -27,7 +23,7 @@ exports.simulatorOpenURLDefinition = {
         required: ['url'],
     },
 };
-async function simulatorOpenURL(params) {
+export async function simulatorOpenURL(params) {
     try {
         if (!params.url) {
             return {
@@ -37,8 +33,8 @@ async function simulatorOpenURL(params) {
             };
         }
         const deviceId = params.device_id || 'booted';
-        logger_js_1.logger.info(`Opening URL on ${deviceId}: ${params.url}`);
-        const result = await (0, command_js_1.runCommand)('xcrun', ['simctl', 'openurl', deviceId, params.url]);
+        logger.info(`Opening URL on ${deviceId}: ${params.url}`);
+        const result = await runCommand('xcrun', ['simctl', 'openurl', deviceId, params.url]);
         const data = {
             message: 'URL opened successfully',
             app_identifier: '', // Not applicable
@@ -60,7 +56,7 @@ async function simulatorOpenURL(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Open URL failed', error);
+        logger.error('Open URL failed', error);
         return {
             success: false,
             error: String(error),

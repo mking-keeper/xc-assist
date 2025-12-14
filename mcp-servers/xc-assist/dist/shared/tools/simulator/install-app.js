@@ -1,15 +1,11 @@
-"use strict";
 /**
  * Simulator Install App Tool
  *
  * Install an app on simulator
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulatorInstallAppDefinition = void 0;
-exports.simulatorInstallApp = simulatorInstallApp;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.simulatorInstallAppDefinition = {
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
+export const simulatorInstallAppDefinition = {
     name: "simulator_install_app",
     description: "Install app on simulator",
     inputSchema: {
@@ -43,7 +39,7 @@ exports.simulatorInstallAppDefinition = {
  * });
  * ```
  */
-async function simulatorInstallApp(params) {
+export async function simulatorInstallApp(params) {
     try {
         // Validation
         if (!params.app_path) {
@@ -55,8 +51,8 @@ async function simulatorInstallApp(params) {
         }
         const deviceId = params.device_id || "booted";
         // Execute install command
-        logger_js_1.logger.info(`Installing app on ${deviceId}: ${params.app_path}`);
-        const result = await (0, command_js_1.runCommand)("xcrun", [
+        logger.info(`Installing app on ${deviceId}: ${params.app_path}`);
+        const result = await runCommand("xcrun", [
             "simctl",
             "install",
             deviceId,
@@ -84,7 +80,7 @@ async function simulatorInstallApp(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error("Install app failed", error);
+        logger.error("Install app failed", error);
         return {
             success: false,
             error: `Install failed: ${String(error)}`,

@@ -1,13 +1,8 @@
-"use strict";
 /**
  * Safe command execution utilities
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.runCommand = runCommand;
-exports.findXcodeProject = findXcodeProject;
-exports.extractBuildErrors = extractBuildErrors;
-const child_process_1 = require("child_process");
-const constants_js_1 = require("./constants.js");
+import { spawn } from 'child_process';
+import { COMMAND_CONFIG } from './constants.js';
 /**
  * Execute a command with arguments using spawn (safer than shell execution).
  * This function does NOT invoke a shell, preventing command injection vulnerabilities.
@@ -17,14 +12,14 @@ const constants_js_1 = require("./constants.js");
  * @param options - Execution options
  * @returns Command result with stdout, stderr, and exit code
  */
-async function runCommand(command, args, options = {}) {
+export async function runCommand(command, args, options = {}) {
     const defaultOptions = {
-        timeout: constants_js_1.COMMAND_CONFIG.DEFAULT_TIMEOUT_MS,
-        maxBuffer: constants_js_1.COMMAND_CONFIG.DEFAULT_MAX_BUFFER_BYTES,
+        timeout: COMMAND_CONFIG.DEFAULT_TIMEOUT_MS,
+        maxBuffer: COMMAND_CONFIG.DEFAULT_MAX_BUFFER_BYTES,
         ...options,
     };
     return new Promise((resolve, reject) => {
-        const child = (0, child_process_1.spawn)(command, args, {
+        const child = spawn(command, args, {
             cwd: defaultOptions.cwd,
             timeout: defaultOptions.timeout,
         });
@@ -78,7 +73,7 @@ async function runCommand(command, args, options = {}) {
  * @param searchPath - Directory to search in (defaults to current directory)
  * @returns Path to the found project/workspace, or null if not found
  */
-async function findXcodeProject(searchPath = '.') {
+export async function findXcodeProject(searchPath = '.') {
     try {
         // Search for .xcworkspace first
         const workspaceResult = await runCommand('find', [
@@ -121,7 +116,7 @@ async function findXcodeProject(searchPath = '.') {
  * @param maxLines - Maximum error lines to return (default: 10)
  * @returns Array of error/warning lines
  */
-function extractBuildErrors(output, maxLines = 10) {
+export function extractBuildErrors(output, maxLines = 10) {
     const lines = output.split('\n');
     const errors = [];
     for (const line of lines) {

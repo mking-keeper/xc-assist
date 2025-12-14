@@ -1,13 +1,10 @@
-"use strict";
 /**
  * Shared constants for all tools
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CACHE_CONFIG = exports.COMMAND_CONFIG = void 0;
 /**
  * Command execution configuration
  */
-exports.COMMAND_CONFIG = {
+export const COMMAND_CONFIG = {
     /** Default timeout for command execution in milliseconds (5 minutes) */
     DEFAULT_TIMEOUT_MS: 5 * 60 * 1000,
     /** Default maximum buffer size for command output in bytes (10MB) */
@@ -16,7 +13,7 @@ exports.COMMAND_CONFIG = {
 /**
  * Cache configuration
  */
-exports.CACHE_CONFIG = {
+export const CACHE_CONFIG = {
     /** Maximum age of cached responses in milliseconds (30 minutes) */
     MAX_AGE_MS: 30 * 60 * 1000,
     /** Maximum number of cache entries to store */

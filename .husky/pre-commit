@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Rebuild xc-assist if TypeScript files changed
-if git diff --cached --name-only | grep -q "mcp-servers/xc-assist/src/"; then
+if git diff --cached --name-only | grep -Eq "^(mcp-servers/xc-assist/src/|mcp-servers/shared/)"; then
   echo "📦 Building xc-assist..."
   cd mcp-servers/xc-assist
   npm run build

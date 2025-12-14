@@ -103,7 +103,7 @@ npm run build
 
 ### Husky (Git Hooks)
 
-This project uses [Husky](https://typicode.github.io/husky/) for Git hooks. The pre-commit hook automatically rebuilds the MCP server when TypeScript files in `mcp-servers/xc-assist/src/` are changed.
+This project uses [Husky](https://typicode.github.io/husky/) for Git hooks. The pre-commit hook automatically rebuilds the MCP server when TypeScript files in `mcp-servers/xc-assist/src/` or `mcp-servers/shared/` are changed.
 
 The hook is configured in `.husky/pre-commit`. Husky is set up automatically when you run `npm install` (via the `prepare` script).
 

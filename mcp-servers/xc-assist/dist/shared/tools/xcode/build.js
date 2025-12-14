@@ -1,16 +1,12 @@
-"use strict";
 /**
  * Xcode Build Tool
  *
  * Compile Xcode projects with configuration options
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.xcodeBuildDefinition = void 0;
-exports.xcodeBuild = xcodeBuild;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-const destination_js_1 = require("../../utils/destination.js");
-exports.xcodeBuildDefinition = {
+import { runCommand, findXcodeProject, extractBuildErrors, } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
+import { resolveDestination } from "../../utils/destination.js";
+export const xcodeBuildDefinition = {
     name: "xcode_build",
     description: "Build Xcode project for iOS apps. Check project's CLAUDE.md for preferred simulator and SDK defaults when parameters are not explicitly provided.",
     inputSchema: {
@@ -37,7 +33,7 @@ exports.xcodeBuildDefinition = {
         required: ["scheme"],
     },
 };
-async function xcodeBuild(params) {
+export async function xcodeBuild(params) {
     try {
         // Validation
         if (!params.scheme) {
@@ -48,7 +44,7 @@ async function xcodeBuild(params) {
             };
         }
         // Find project if not specified
-        const projectPath = params.project_path || (await (0, command_js_1.findXcodeProject)());
+        const projectPath = params.project_path || (await findXcodeProject());
         if (!projectPath) {
             return {
                 success: false,
@@ -72,25 +68,25 @@ async function xcodeBuild(params) {
         if (params.destination) {
             // Resolve destination (auto-complete OS version if needed)
             // Pass projectPath for potential project-specific config
-            const resolution = await (0, destination_js_1.resolveDestination)(params.destination, projectPath);
+            const resolution = await resolveDestination(params.destination, projectPath);
             // Log resolution details
             if (resolution.wasResolved) {
-                logger_js_1.logger.info(`Resolved destination: ${resolution.details}`);
+                logger.info(`Resolved destination: ${resolution.details}`);
             }
             if (resolution.warning) {
-                logger_js_1.logger.warn(`Destination warning: ${resolution.warning}`);
+                logger.warn(`Destination warning: ${resolution.warning}`);
             }
             args.push("-destination", resolution.destination);
         }
         args.push("build");
         // Execute build
-        logger_js_1.logger.info(`Building project: ${params.scheme}`);
+        logger.info(`Building project: ${params.scheme}`);
         const startTime = Date.now();
-        const result = await (0, command_js_1.runCommand)("xcodebuild", args);
+        const result = await runCommand("xcodebuild", args);
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
         // Extract errors if build failed
         const errors = result.code !== 0
-            ? (0, command_js_1.extractBuildErrors)(result.stdout + "\n" + result.stderr)
+            ? extractBuildErrors(result.stdout + "\n" + result.stderr)
             : undefined;
         // Return result
         const data = {
@@ -114,7 +110,7 @@ async function xcodeBuild(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error("Build failed", error);
+        logger.error("Build failed", error);
         return {
             success: false,
             error: String(error),

@@ -1,45 +1,6 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadConfig = loadConfig;
-exports.saveUsage = saveUsage;
-exports.getDefaultSimulator = getDefaultSimulator;
-exports.getRecentSimulators = getRecentSimulators;
-const fs = __importStar(require("fs/promises"));
-const path = __importStar(require("path"));
-const os = __importStar(require("os"));
+import * as fs from "fs/promises";
+import * as path from "path";
+import * as os from "os";
 const USER_CONFIG_DIR = path.join(os.homedir(), ".xcplugin");
 const USER_CONFIG_FILE = path.join(USER_CONFIG_DIR, "config.json");
 const PROJECT_CONFIG_FILE = ".xcplugin";
@@ -97,7 +58,7 @@ async function loadProjectConfig(projectPath) {
  * @param projectPath - Path to the project directory (defaults to cwd)
  * @returns Merged configuration
  */
-async function loadConfig(projectPath) {
+export async function loadConfig(projectPath) {
     const userConfig = await loadUserConfig();
     const projectConfig = await loadProjectConfig(projectPath);
     // Merge configurations (project overrides user)
@@ -120,7 +81,7 @@ async function loadConfig(projectPath) {
  * @param destination - Resolved destination string to track
  * @param projectPath - Optional project path for project-specific tracking
  */
-async function saveUsage(destination, projectPath) {
+export async function saveUsage(destination, projectPath) {
     try {
         // Load current config
         const config = await loadConfig(projectPath);
@@ -172,7 +133,7 @@ async function saveUsage(destination, projectPath) {
  * @param projectPath - Optional project path to check for project-specific default
  * @returns Default simulator destination string or undefined
  */
-async function getDefaultSimulator(projectPath) {
+export async function getDefaultSimulator(projectPath) {
     const config = await loadConfig(projectPath);
     // Priority 1: Explicit default from config
     if (config.defaultSimulator) {
@@ -191,7 +152,7 @@ async function getDefaultSimulator(projectPath) {
  * @param limit - Maximum number of recent simulators to return
  * @returns Array of recent simulator usage entries
  */
-async function getRecentSimulators(limit = 5) {
+export async function getRecentSimulators(limit = 5) {
     const config = await loadConfig();
     return (config.recentSimulators || []).slice(0, limit);
 }

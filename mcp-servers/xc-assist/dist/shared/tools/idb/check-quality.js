@@ -1,15 +1,11 @@
-"use strict";
 /**
  * IDB Check Accessibility Quality Tool
  *
  * Assess accessibility data quality (determines if screenshot needed)
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.idbCheckQualityDefinition = void 0;
-exports.idbCheckQuality = idbCheckQuality;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.idbCheckQualityDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const idbCheckQualityDefinition = {
     name: 'idb_check_quality',
     description: 'Check accessibility data quality (use before deciding on screenshot)',
     inputSchema: {
@@ -22,12 +18,12 @@ exports.idbCheckQualityDefinition = {
         },
     },
 };
-async function idbCheckQuality(params) {
+export async function idbCheckQuality(params) {
     try {
         const target = params.target || 'booted';
         // Execute describe to get all elements
-        logger_js_1.logger.info('Checking accessibility quality');
-        const result = await (0, command_js_1.runCommand)('idb', ['ui', 'describe-all', '--target', target, '--json']);
+        logger.info('Checking accessibility quality');
+        const result = await runCommand('idb', ['ui', 'describe-all', '--target', target, '--json']);
         // Parse and analyze
         const json = JSON.parse(result.stdout);
         let totalElements = 0;
@@ -67,7 +63,7 @@ async function idbCheckQuality(params) {
         };
     }
     catch (error) {
-        logger_js_1.logger.error('Check quality failed', error);
+        logger.error('Check quality failed', error);
         return {
             success: false,
             error: String(error),

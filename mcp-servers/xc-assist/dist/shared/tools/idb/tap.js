@@ -1,15 +1,11 @@
-"use strict";
 /**
  * IDB Tap Tool
  *
  * Tap at coordinates (use after describe to get coordinates)
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.idbTapDefinition = void 0;
-exports.idbTap = idbTap;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.idbTapDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const idbTapDefinition = {
     name: 'idb_tap',
     description: 'Tap at UI coordinates',
     inputSchema: {
@@ -35,7 +31,7 @@ exports.idbTapDefinition = {
         required: ['x', 'y'],
     },
 };
-async function idbTap(params) {
+export async function idbTap(params) {
     try {
         // Validation
         if (params.x === undefined || params.y === undefined) {
@@ -48,8 +44,8 @@ async function idbTap(params) {
         const target = params.target || 'booted';
         const duration = params.duration || 0.1;
         // Execute tap command
-        logger_js_1.logger.info(`Tapping at (${params.x}, ${params.y})`);
-        const result = await (0, command_js_1.runCommand)('idb', [
+        logger.info(`Tapping at (${params.x}, ${params.y})`);
+        const result = await runCommand('idb', [
             'ui',
             'tap',
             String(Math.round(params.x)),
@@ -80,7 +76,7 @@ async function idbTap(params) {
         }
     }
     catch (error) {
-        logger_js_1.logger.error('Tap failed', error);
+        logger.error('Tap failed', error);
         return {
             success: false,
             error: String(error),

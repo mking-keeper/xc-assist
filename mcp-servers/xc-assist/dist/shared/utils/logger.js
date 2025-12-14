@@ -1,9 +1,6 @@
-"use strict";
 /**
  * Simple logger for tools
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.logger = void 0;
 const LOG_LEVEL = process.env.XC_LOG_LEVEL || 'info';
 const LEVELS = {
     error: 0,
@@ -14,7 +11,7 @@ const LEVELS = {
 function shouldLog(level) {
     return LEVELS[level] <= LEVELS[LOG_LEVEL];
 }
-exports.logger = {
+export const logger = {
     error(message, error) {
         if (shouldLog('error')) {
             console.error(`[ERROR] ${message}`, error || '');

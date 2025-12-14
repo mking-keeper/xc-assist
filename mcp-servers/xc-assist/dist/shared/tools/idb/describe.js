@@ -1,15 +1,11 @@
-"use strict";
 /**
  * IDB Describe Tool
  *
  * Query UI accessibility tree (accessibility-first approach)
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.idbDescribeDefinition = void 0;
-exports.idbDescribe = idbDescribe;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.idbDescribeDefinition = {
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
+export const idbDescribeDefinition = {
     name: "idb_describe",
     description: "Query UI accessibility tree",
     inputSchema: {
@@ -35,15 +31,15 @@ exports.idbDescribeDefinition = {
         },
     },
 };
-async function idbDescribe(params) {
+export async function idbDescribe(params) {
     try {
         const target = params.target || "booted";
         const operation = params.operation || "all";
         // Execute describe command
-        logger_js_1.logger.info(`Querying accessibility tree: ${operation}`);
+        logger.info(`Querying accessibility tree: ${operation}`);
         let result;
         if (operation === "all") {
-            result = await (0, command_js_1.runCommand)("idb", [
+            result = await runCommand("idb", [
                 "ui",
                 "describe-all",
                 "--target",
@@ -54,7 +50,7 @@ async function idbDescribe(params) {
         else if (operation === "point" &&
             params.x !== undefined &&
             params.y !== undefined) {
-            result = await (0, command_js_1.runCommand)("idb", [
+            result = await runCommand("idb", [
                 "ui",
                 "describe-point",
                 String(params.x),
@@ -100,7 +96,7 @@ async function idbDescribe(params) {
         };
     }
     catch (error) {
-        logger_js_1.logger.error("Describe failed", error);
+        logger.error("Describe failed", error);
         return {
             success: false,
             error: String(error),

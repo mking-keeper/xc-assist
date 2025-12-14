@@ -1,15 +1,11 @@
-"use strict";
 /**
  * IDB Find Element Tool
  *
  * Search UI elements by label/identifier (semantic search)
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.idbFindElementDefinition = void 0;
-exports.idbFindElement = idbFindElement;
-const command_js_1 = require("../../utils/command.js");
-const logger_js_1 = require("../../utils/logger.js");
-exports.idbFindElementDefinition = {
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
+export const idbFindElementDefinition = {
     name: 'idb_find_element',
     description: 'Search UI elements by label or identifier (semantic search)',
     inputSchema: {
@@ -27,7 +23,7 @@ exports.idbFindElementDefinition = {
         required: ['query'],
     },
 };
-async function idbFindElement(params) {
+export async function idbFindElement(params) {
     try {
         // Validation
         if (!params.query) {
@@ -39,8 +35,8 @@ async function idbFindElement(params) {
         }
         const target = params.target || 'booted';
         // Execute find command
-        logger_js_1.logger.info(`Finding element: ${params.query}`);
-        const result = await (0, command_js_1.runCommand)('idb', [
+        logger.info(`Finding element: ${params.query}`);
+        const result = await runCommand('idb', [
             'ui',
             'describe-all',
             '--target',
@@ -78,7 +74,7 @@ async function idbFindElement(params) {
         };
     }
     catch (error) {
-        logger_js_1.logger.error('Find element failed', error);
+        logger.error('Find element failed', error);
         return {
             success: false,
             error: String(error),
