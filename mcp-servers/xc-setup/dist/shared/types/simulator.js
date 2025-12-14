@@ -1,4 +1,0 @@
-/**
- * Simulator tool types
- */
-export {};

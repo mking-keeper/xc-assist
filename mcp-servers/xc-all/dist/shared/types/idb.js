@@ -1,4 +1,0 @@
-/**
- * IDB tool types
- */
-export {};

@@ -1,18 +1,14 @@
 {
   "name": "xclaude-plugin",
-  "version": "0.4.0",
-  "description": "Token-efficient iOS development automation plugin for Claude Code",
+  "version": "0.5.0",
+  "description": "iOS Simulator testing plugin for Claude Code",
   "private": true,
   "workspaces": [
     "mcp-servers/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "test": "cd mcp-servers && npm run test",
-    "coverage": "cd mcp-servers && npm run coverage",
-    "lint": "cd mcp-servers && npm run lint",
-    "clean": "rm -rf mcp-servers/*/dist",
-    "prepare": "husky"
+    "clean": "rm -rf mcp-servers/*/dist"
   },
   "keywords": [
     "xcode",
@@ -22,36 +18,19 @@
     "plugin",
     "mcp"
   ],
-  "author": "Conor Luddy <conor@conorluddy.com>",
+  "author": "mking-keeper",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/conorluddy/xclaude-plugin.git"
+    "url": "https://github.com/mking-keeper/xclaude-plugin.git"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "devDependencies": {
     "@types/node": "24.10.0",
-    "@vitest/coverage-v8": "^1.6.0",
     "esbuild": "^0.21.5",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.2.11",
-    "patch-package": "^8.0.0",
-    "prettier": "^3.6.2",
-    "typescript": "5.9.3",
-    "vitest": "^1.6.0"
-  },
-  "lint-staged": {
-    "mcp-servers/**/*.ts": [
-      "prettier --write"
-    ],
-    "mcp-servers/**/*.{json,md}": [
-      "prettier --write"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
-    ]
+    "typescript": "5.9.3"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.21.0"
