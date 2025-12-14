@@ -36,13 +36,30 @@ iOS Simulator testing plugin for Claude Code with 15 tools.
 - macOS 13.0+
 - Xcode 15.0+
 - Node.js 18+
-- IDB (Facebook iOS Development Bridge) for UI automation
+- IDB (Facebook iOS Development Bridge) for UI automation tools
 
 ## Installation
 
+### 1. Install IDB (required for UI automation)
+
+```bash
+# Install idb-companion (runs on simulator)
+brew tap facebook/fb
+brew install idb-companion
+
+# Install idb client (Python CLI)
+pip install fb-idb
+```
+
+Verify installation:
+```bash
+idb list-targets
+```
+
+### 2. Install the plugin
+
 ```bash
 /plugin marketplace add mking-keeper/xclaude-plugin
-/plugin install xclaude-plugin
 ```
 
 ## Usage
