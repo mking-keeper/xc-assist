@@ -41,7 +41,7 @@ class XCAssistServer {
     this.server = new Server(
       {
         name: 'xc-assist',
-        version: '0.5.0',
+        version: '1.0.0',
         title: 'iOS Simulator Testing',
         description: 'UI testing with gestures, deep links, app lifecycle, and accessibility-first automation',
       },
