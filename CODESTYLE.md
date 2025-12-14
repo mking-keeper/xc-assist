@@ -1,6 +1,6 @@
 # Code Style Guide
 
-**xclaude-plugin Development Guidelines** (applies to all servers in `mcp-servers/`)
+**xc-assist Development Guidelines** (applies to all servers in `mcp-servers/`)
 
 This guide ensures consistency across all 8 modular MCP servers.
 

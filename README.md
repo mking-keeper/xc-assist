@@ -1,6 +1,6 @@
 # xc-assist
 
-iOS Simulator testing plugin for Claude Code with 15 tools.
+iOS Simulator testing plugin for Claude Code.
 
 ```
 /plugin marketplace add mking-keeper/xc-assist
@@ -58,19 +58,65 @@ idb list-targets
 
 ### 2. Install the plugin
 
-```bash
+1. Open Claude Code in your terminal
+2. Run the plugin install command:
+
+```
 /plugin marketplace add mking-keeper/xc-assist
 ```
 
+3. Restart Claude Code to load the plugin
+
 ## Usage
+
+1. Open Claude Code in your iOS project directory
+2. Ask Claude to help with simulator tasks:
 
 ```
 "List available simulators"
 "Boot iPhone 15 Pro"
-"Build and install my app"
+"Build my app for the simulator"
+"Install and launch the app"
 "Tap the Login button"
+"Type 'hello' into the text field"
 "Take a screenshot"
+"Check the accessibility tree"
 ```
+
+### Example Workflow
+
+```
+> "Build my app and run it on iPhone 15"
+> "Tap the Sign In button"
+> "Enter test@example.com in the email field"
+> "Take a screenshot of the current state"
+```
+
+## Development
+
+### Setup
+
+```bash
+npm install
+npm run build
+```
+
+### Husky (Git Hooks)
+
+This project uses [Husky](https://typicode.github.io/husky/) for Git hooks. The pre-commit hook automatically rebuilds the MCP server when TypeScript files in `mcp-servers/xc-assist/src/` are changed.
+
+The hook is configured in `.husky/pre-commit`. Husky is set up automatically when you run `npm install` (via the `prepare` script).
+
+### Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run build` | Build all MCP servers |
+| `npm run clean` | Remove dist directories |
+
+## Credits
+
+Based on [xclaude-plugin](https://github.com/conorluddy/xclaude-plugin) by Conor Luddy.
 
 ## License
 
