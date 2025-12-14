@@ -1,13 +1,13 @@
 {
-  "name": "xclaude-plugin",
+  "name": "xc-assist",
   "version": "0.5.0",
   "description": "iOS Simulator testing with 15 tools: build, lifecycle, UI automation, gestures, deep links",
   "author": {
     "name": "mking-keeper",
     "url": "https://github.com/mking-keeper"
   },
-  "homepage": "https://github.com/mking-keeper/xclaude-plugin",
-  "repository": "https://github.com/mking-keeper/xclaude-plugin",
+  "homepage": "https://github.com/mking-keeper/xc-assist",
+  "repository": "https://github.com/mking-keeper/xc-assist",
   "license": "MIT",
   "keywords": [
     "xcode",

@@ -1,5 +1,5 @@
 {
-  "name": "xclaude-plugin-marketplace",
+  "name": "xc-assist-marketplace",
   "owner": {
     "name": "mking-keeper",
     "url": "https://github.com/mking-keeper"
@@ -10,7 +10,7 @@
   },
   "plugins": [
     {
-      "name": "xclaude-plugin",
+      "name": "xc-assist",
       "source": "./",
       "description": "iOS Simulator testing with 15 tools: build, lifecycle, UI automation, gestures, deep links",
       "version": "0.5.0",

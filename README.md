@@ -3,7 +3,7 @@
 iOS Simulator testing plugin for Claude Code with 15 tools.
 
 ```
-/plugin marketplace add mking-keeper/xclaude-plugin
+/plugin marketplace add mking-keeper/xc-assist
 ```
 
 ## Tools
@@ -59,7 +59,7 @@ idb list-targets
 ### 2. Install the plugin
 
 ```bash
-/plugin marketplace add mking-keeper/xclaude-plugin
+/plugin marketplace add mking-keeper/xc-assist
 ```
 
 ## Usage

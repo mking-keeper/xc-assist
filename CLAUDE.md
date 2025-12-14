@@ -7,7 +7,7 @@
 ## Structure
 
 ```
-xclaude-plugin/
+xc-assist/
 ├── .claude-plugin/
 │   ├── plugin.json        # Plugin manifest
 │   └── marketplace.json   # Marketplace config
@@ -58,4 +58,4 @@ npm run build
 
 ## Repository
 
-https://github.com/mking-keeper/xclaude-plugin
+https://github.com/mking-keeper/xc-assist
