@@ -4,14 +4,14 @@
  * Query UI accessibility tree (accessibility-first approach)
  */
 
-import type { ToolDefinition, ToolResult } from "../types/base.js";
+import type { ToolDefinition, ToolResult } from "../../types/base.js";
 import type {
   DescribeParams,
   DescribeResultData,
   UIElement,
-} from "../types/idb.js";
-import { runCommand } from "../utils/command.js";
-import { logger } from "../utils/logger.js";
+} from "../../types/idb.js";
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 
 export const idbDescribeDefinition: ToolDefinition = {
   name: "idb_describe",

@@ -4,10 +4,10 @@
  * Capture simulator screenshot
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { IOParams, IOResultData } from '../types/simulator.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { IOParams, IOResultData } from '../../types/simulator.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const simulatorScreenshotDefinition: ToolDefinition = {
   name: 'simulator_screenshot',

@@ -4,15 +4,15 @@
  * Compile Xcode projects with configuration options
  */
 
-import type { ToolDefinition, ToolResult } from "../types/base.js";
-import type { BuildParams, BuildResultData } from "../types/xcode.js";
+import type { ToolDefinition, ToolResult } from "../../types/base.js";
+import type { BuildParams, BuildResultData } from "../../types/xcode.js";
 import {
   runCommand,
   findXcodeProject,
   extractBuildErrors,
-} from "../utils/command.js";
-import { logger } from "../utils/logger.js";
-import { resolveDestination } from "../utils/destination.js";
+} from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
+import { resolveDestination } from "../../utils/destination.js";
 
 // Re-export types for consumers
 export type { BuildParams, BuildResultData };

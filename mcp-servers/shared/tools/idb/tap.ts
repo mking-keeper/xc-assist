@@ -4,10 +4,10 @@
  * Tap at coordinates (use after describe to get coordinates)
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { TapParams, TapResultData } from '../types/idb.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { TapParams, TapResultData } from '../../types/idb.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const idbTapDefinition: ToolDefinition = {
   name: 'idb_tap',

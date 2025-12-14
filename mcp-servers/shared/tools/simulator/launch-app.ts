@@ -4,10 +4,10 @@
  * Launch an app on simulator
  */
 
-import type { ToolDefinition, ToolResult } from "../types/base.js";
-import type { LaunchAppParams } from "../types/simulator.js";
-import { runCommand } from "../utils/command.js";
-import { logger } from "../utils/logger.js";
+import type { ToolDefinition, ToolResult } from "../../types/base.js";
+import type { LaunchAppParams } from "../../types/simulator.js";
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 
 export const simulatorLaunchAppDefinition: ToolDefinition = {
   name: "simulator_launch_app",

@@ -14,25 +14,25 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 // Import Xcode tools
-import { xcodeBuild, xcodeBuildDefinition } from './tools/build.js';
+import { xcodeBuild, xcodeBuildDefinition } from '../../shared/tools/xcode/build.js';
 
 // Import simulator tools
-import { simulatorScreenshot, simulatorScreenshotDefinition } from './tools/screenshot.js';
-import { simulatorOpenURL, simulatorOpenURLDefinition } from './tools/openurl.js';
-import { simulatorTerminateApp, simulatorTerminateAppDefinition } from './tools/terminate-app.js';
-import { simulatorGetAppContainer, simulatorGetAppContainerDefinition } from './tools/get-app-container.js';
-import { simulatorList, simulatorListDefinition } from './tools/list.js';
-import { simulatorBoot, simulatorBootDefinition } from './tools/boot.js';
-import { simulatorInstallApp, simulatorInstallAppDefinition } from './tools/install-app.js';
-import { simulatorLaunchApp, simulatorLaunchAppDefinition } from './tools/launch-app.js';
+import { simulatorScreenshot, simulatorScreenshotDefinition } from '../../shared/tools/simulator/screenshot.js';
+import { simulatorOpenURL, simulatorOpenURLDefinition } from '../../shared/tools/simulator/openurl.js';
+import { simulatorTerminateApp, simulatorTerminateAppDefinition } from '../../shared/tools/simulator/terminate-app.js';
+import { simulatorGetAppContainer, simulatorGetAppContainerDefinition } from '../../shared/tools/simulator/get-app-container.js';
+import { simulatorList, simulatorListDefinition } from '../../shared/tools/simulator/list.js';
+import { simulatorBoot, simulatorBootDefinition } from '../../shared/tools/simulator/boot.js';
+import { simulatorInstallApp, simulatorInstallAppDefinition } from '../../shared/tools/simulator/install-app.js';
+import { simulatorLaunchApp, simulatorLaunchAppDefinition } from '../../shared/tools/simulator/launch-app.js';
 
 // Import IDB tools
-import { idbDescribe, idbDescribeDefinition } from './tools/describe.js';
-import { idbTap, idbTapDefinition } from './tools/tap.js';
-import { idbInput, idbInputDefinition } from './tools/input.js';
-import { idbGesture, idbGestureDefinition } from './tools/gesture.js';
-import { idbFindElement, idbFindElementDefinition } from './tools/find-element.js';
-import { idbCheckQuality, idbCheckQualityDefinition } from './tools/check-quality.js';
+import { idbDescribe, idbDescribeDefinition } from '../../shared/tools/idb/describe.js';
+import { idbTap, idbTapDefinition } from '../../shared/tools/idb/tap.js';
+import { idbInput, idbInputDefinition } from '../../shared/tools/idb/input.js';
+import { idbGesture, idbGestureDefinition } from '../../shared/tools/idb/gesture.js';
+import { idbFindElement, idbFindElementDefinition } from '../../shared/tools/idb/find-element.js';
+import { idbCheckQuality, idbCheckQualityDefinition } from '../../shared/tools/idb/check-quality.js';
 
 class XCAssistServer {
   private server: Server;

@@ -4,10 +4,10 @@
  * Perform swipes and hardware button presses
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { GestureParams, GestureResultData } from '../types/idb.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { GestureParams, GestureResultData } from '../../types/idb.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const idbGestureDefinition: ToolDefinition = {
   name: 'idb_gesture',

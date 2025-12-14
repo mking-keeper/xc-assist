@@ -4,10 +4,10 @@
  * Open URL or deep link in simulator
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { OpenURLParams, AppLifecycleResultData } from '../types/simulator.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { OpenURLParams, AppLifecycleResultData } from '../../types/simulator.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const simulatorOpenURLDefinition: ToolDefinition = {
   name: 'simulator_openurl',

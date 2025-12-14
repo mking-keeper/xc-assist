@@ -4,10 +4,10 @@
  * Terminate a running app
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { AppLifecycleParams, AppLifecycleResultData } from '../types/simulator.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { AppLifecycleParams, AppLifecycleResultData } from '../../types/simulator.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const simulatorTerminateAppDefinition: ToolDefinition = {
   name: 'simulator_terminate_app',

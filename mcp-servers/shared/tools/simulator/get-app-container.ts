@@ -4,10 +4,10 @@
  * Get filesystem path to app container
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { GetAppContainerParams, IOResultData } from '../types/simulator.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { GetAppContainerParams, IOResultData } from '../../types/simulator.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const simulatorGetAppContainerDefinition: ToolDefinition = {
   name: 'simulator_get_app_container',

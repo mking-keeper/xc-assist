@@ -4,10 +4,10 @@
  * Search UI elements by label/identifier (semantic search)
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { FindElementParams, FindElementResultData, UIElement } from '../types/idb.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { FindElementParams, FindElementResultData, UIElement } from '../../types/idb.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const idbFindElementDefinition: ToolDefinition = {
   name: 'idb_find_element',

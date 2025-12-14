@@ -4,10 +4,10 @@
  * Boot a simulator device
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { DeviceLifecycleParams, DeviceLifecycleResultData } from '../types/simulator.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { DeviceLifecycleParams, DeviceLifecycleResultData } from '../../types/simulator.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const simulatorBootDefinition: ToolDefinition = {
   name: 'simulator_boot',

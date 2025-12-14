@@ -12,12 +12,16 @@ xc-assist/
 │   ├── plugin.json        # Plugin manifest
 │   └── marketplace.json   # Marketplace config
 ├── mcp-servers/
+│   ├── shared/            # Shared code (mirrors upstream)
+│   │   ├── tools/
+│   │   │   ├── idb/       # IDB tools
+│   │   │   ├── simulator/ # Simulator tools
+│   │   │   └── xcode/     # Xcode tools
+│   │   ├── types/         # Type definitions
+│   │   └── utils/         # Utilities
 │   └── xc-assist/
 │       ├── src/
-│       │   ├── index.ts   # Server entry (15 tools)
-│       │   ├── tools/     # Tool implementations
-│       │   ├── types/     # Type definitions
-│       │   └── utils/     # Utilities
+│       │   └── index.ts   # Server entry (15 tools)
 │       ├── package.json
 │       └── tsconfig.json
 ├── .mcp.json              # MCP config

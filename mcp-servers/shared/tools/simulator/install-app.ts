@@ -4,10 +4,10 @@
  * Install an app on simulator
  */
 
-import type { ToolDefinition, ToolResult } from "../types/base.js";
-import type { InstallAppParams } from "../types/simulator.js";
-import { runCommand } from "../utils/command.js";
-import { logger } from "../utils/logger.js";
+import type { ToolDefinition, ToolResult } from "../../types/base.js";
+import type { InstallAppParams } from "../../types/simulator.js";
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 
 export const simulatorInstallAppDefinition: ToolDefinition = {
   name: "simulator_install_app",

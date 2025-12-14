@@ -4,13 +4,13 @@
  * Assess accessibility data quality (determines if screenshot needed)
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
 import type {
   CheckAccessibilityParams,
   AccessibilityQualityResultData,
-} from '../types/idb.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+} from '../../types/idb.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const idbCheckQualityDefinition: ToolDefinition = {
   name: 'idb_check_quality',

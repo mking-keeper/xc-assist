@@ -4,10 +4,10 @@
  * Type text or press keys
  */
 
-import type { ToolDefinition, ToolResult } from '../types/base.js';
-import type { InputParams, InputResultData } from '../types/idb.js';
-import { runCommand } from '../utils/command.js';
-import { logger } from '../utils/logger.js';
+import type { ToolDefinition, ToolResult } from '../../types/base.js';
+import type { InputParams, InputResultData } from '../../types/idb.js';
+import { runCommand } from '../../utils/command.js';
+import { logger } from '../../utils/logger.js';
 
 export const idbInputDefinition: ToolDefinition = {
   name: 'idb_input',
