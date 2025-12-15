@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**xc-assist** - iOS Simulator testing plugin for Claude Code with 15 tools.
+**xc-assist** - iOS Simulator testing plugin for Claude Code.
 
 ## Structure
 
@@ -12,12 +12,16 @@ xc-assist/
 │   ├── plugin.json        # Plugin manifest
 │   └── marketplace.json   # Marketplace config
 ├── mcp-servers/
+│   ├── shared/            # Shared code (mirrors upstream)
+│   │   ├── tools/
+│   │   │   ├── idb/       # IDB tools
+│   │   │   ├── simulator/ # Simulator tools
+│   │   │   └── xcode/     # Xcode tools
+│   │   ├── types/         # Type definitions
+│   │   └── utils/         # Utilities
 │   └── xc-assist/
 │       ├── src/
-│       │   ├── index.ts   # Server entry (15 tools)
-│       │   ├── tools/     # Tool implementations
-│       │   ├── types/     # Type definitions
-│       │   └── utils/     # Utilities
+│       │   └── index.ts   # Server entry
 │       ├── package.json
 │       └── tsconfig.json
 ├── .mcp.json              # MCP config
@@ -27,9 +31,11 @@ xc-assist/
 ## Tools (15)
 
 ### Build
+
 - `xcode_build` - Build Xcode project
 
 ### Simulator Lifecycle
+
 - `simulator_list` - List simulators
 - `simulator_boot` - Start simulator
 - `simulator_install_app` - Install .app
@@ -37,6 +43,7 @@ xc-assist/
 - `simulator_terminate_app` - Kill app
 
 ### UI Automation
+
 - `idb_describe` - Query accessibility tree
 - `idb_find_element` - Search by label
 - `idb_check_quality` - Accessibility quality
@@ -45,6 +52,7 @@ xc-assist/
 - `idb_gesture` - Swipes, buttons
 
 ### Utilities
+
 - `simulator_screenshot` - Capture screen
 - `simulator_openurl` - Deep links
 - `simulator_get_app_container` - App sandbox

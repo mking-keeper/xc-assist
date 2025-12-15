@@ -1,6 +1,6 @@
 {
-  "name": "xclaude-plugin",
-  "version": "0.5.0",
+  "name": "xc-assist",
+  "version": "1.0.0",
   "description": "iOS Simulator testing plugin for Claude Code",
   "private": true,
   "workspaces": [
@@ -8,7 +8,12 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "clean": "rm -rf mcp-servers/*/dist"
+    "clean": "rm -rf mcp-servers/*/dist",
+    "test": "cd mcp-servers && npm run test",
+    "coverage": "cd mcp-servers && npm run coverage",
+    "ts:check": "cd mcp-servers && npm run ts:check",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "keywords": [
     "xcode",
@@ -22,15 +27,19 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mking-keeper/xclaude-plugin.git"
+    "url": "https://github.com/mking-keeper/xc-assist.git"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "devDependencies": {
     "@types/node": "24.10.0",
+    "@vitest/coverage-v8": "^1.6.0",
     "esbuild": "^0.21.5",
-    "typescript": "5.9.3"
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
+    "typescript": "5.9.3",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.21.0"

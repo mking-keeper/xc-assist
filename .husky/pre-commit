@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Rebuild xc-assist if TypeScript files changed
-if git diff --cached --name-only | grep -q "mcp-servers/xc-assist/src/"; then
-  echo "📦 Building xc-assist..."
-  cd mcp-servers/xc-assist
-  npm run build
-  cd ../..
-  git add mcp-servers/xc-assist/dist/
+set -euo pipefail
+
+# Rebuild MCP servers if TypeScript files changed (ensures dist/ stays in sync)
+if git diff --cached --name-only | grep -q "mcp-servers/"; then
+  echo "📦 Building all MCP servers (changes detected)..."
+  npm run build:all --prefix mcp-servers
+  git add mcp-servers/xc-*/dist/
 fi
