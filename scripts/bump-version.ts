@@ -2,6 +2,7 @@
 
 import { readFile, writeFile } from "fs/promises";
 import { execSync } from "child_process";
+import { parseJSON, stringifyJSON } from "confbox";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -71,7 +72,7 @@ function setNestedValue(
 async function readJson(filePath: string): Promise<Record<string, unknown>> {
   const fullPath = join(ROOT, filePath);
   const content = await readFile(fullPath, "utf8");
-  return JSON.parse(content);
+  return parseJSON(content);
 }
 
 async function writeJson(
@@ -79,7 +80,7 @@ async function writeJson(
   data: Record<string, unknown>,
 ): Promise<void> {
   const fullPath = join(ROOT, filePath);
-  await writeFile(fullPath, JSON.stringify(data, null, 2) + "\n");
+  await writeFile(fullPath, stringifyJSON(data));
 }
 
 async function main(): Promise<void> {
@@ -103,17 +104,10 @@ async function main(): Promise<void> {
     await writeJson(path, data);
   }
 
-  // Format files with Prettier
-  const filePaths = FILES.map((f) => f.path).join(" ");
-  console.log("\nFormatting with Prettier...");
-  execSync(`npx prettier --write ${filePaths}`, {
-    cwd: ROOT,
-    stdio: "inherit",
-  });
-
   console.log("\nCreating git commit and tag...");
 
   // Stage all changed files
+  const filePaths = FILES.map((f) => f.path).join(" ");
   execSync(`git add ${filePaths}`, { cwd: ROOT, stdio: "inherit" });
 
   // Commit
