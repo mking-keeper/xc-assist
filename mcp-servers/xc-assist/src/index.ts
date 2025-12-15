@@ -27,10 +27,6 @@ import {
   simulatorTerminateAppDefinition,
 } from "../../shared/tools/simulator/terminate-app.js";
 import {
-  simulatorGetAppContainer,
-  simulatorGetAppContainerDefinition,
-} from "../../shared/tools/simulator/get-app-container.js";
-import {
   simulatorList,
   simulatorListDefinition,
 } from "../../shared/tools/simulator/list.js";
@@ -118,7 +114,6 @@ class XCAssistServer {
         // Simulator utilities
         simulatorScreenshotDefinition,
         simulatorOpenURLDefinition,
-        simulatorGetAppContainerDefinition,
         // New tools
         simulatorPushDefinition,
         simulatorSetLocationDefinition,
@@ -285,22 +280,6 @@ class XCAssistServer {
                 text: JSON.stringify(
                   await simulatorOpenURL(
                     args as unknown as Parameters<typeof simulatorOpenURL>[0],
-                  ),
-                ),
-              },
-            ],
-          };
-
-        case "simulator_get_app_container":
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(
-                  await simulatorGetAppContainer(
-                    args as unknown as Parameters<
-                      typeof simulatorGetAppContainer
-                    >[0],
                   ),
                 ),
               },
