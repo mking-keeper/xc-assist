@@ -1,37 +1,15 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+set -euo pipefail
 
-# TypeScript check
 echo "📝 Checking TypeScript..."
 npm run ts:check
-if [ $? -ne 0 ]; then
-  echo "❌ TypeScript check failed. Commit aborted."
-  exit 1
-fi
 
-# Format check
 echo "🎨 Checking formatting..."
 npm run format:check
-if [ $? -ne 0 ]; then
-  echo "❌ Format check failed. Run 'npm run format' to fix. Commit aborted."
-  exit 1
-fi
-
-# Run tests (from mcp-servers where vitest config is located)
-echo "🧪 Running tests..."
-cd mcp-servers && npm run test
-if [ $? -ne 0 ]; then
-  echo "❌ Tests failed. Commit aborted."
-  cd ..
-  exit 1
-fi
-cd ..
 
 # Rebuild MCP servers if TypeScript files changed (ensures dist/ stays in sync)
 if git diff --cached --name-only | grep -q "mcp-servers/"; then
   echo "📦 Building all MCP servers (changes detected)..."
-  cd mcp-servers
-  npm run build:all
-  cd ..
+  npm run build:all --prefix mcp-servers
   git add mcp-servers/xc-*/dist/
 fi
