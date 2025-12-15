@@ -27,7 +27,7 @@ xc-assist/
 └── README.md
 ```
 
-## Tools (12)
+## Tools (17)
 
 ### Simulator Lifecycle
 
@@ -40,9 +40,17 @@ xc-assist/
 - `idb_describe` - Query accessibility tree
 - `idb_find_element` - Search by label
 - `idb_check_quality` - Accessibility quality
+- `idb_list_apps` - List installed apps
 - `idb_tap` - Tap coordinates
 - `idb_input` - Text/key input
 - `idb_gesture` - Swipes, buttons
+
+### Simulator Control
+
+- `simulator_push` - Send push notifications
+- `simulator_set_location` - Set GPS location
+- `simulator_privacy` - Grant/revoke permissions
+- `simulator_pasteboard` - Read/write clipboard
 
 ### Utilities
 
