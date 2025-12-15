@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "ts:check": "npm run ts:check --workspaces --if-present",
+    "audit:check": "npm audit --audit-level=high",
     "clean": "rm -rf */dist",
     "install-all": "npm install --workspaces"
   },

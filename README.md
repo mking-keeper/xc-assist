@@ -117,6 +117,7 @@ The hook is configured in `.husky/pre-commit`. Husky is set up automatically whe
 | `npm run coverage` | Run tests with coverage report |
 | `npm run ts:check` | TypeScript type checking |
 | `npm run format:check` | Check code formatting with Prettier |
+| `npm run audit:check` | Check for high severity vulnerabilities |
 
 ## Credits
 
