@@ -59,13 +59,7 @@ export async function simulatorPrivacy(params) {
                 operation: "privacy",
             };
         }
-        const args = [
-            "simctl",
-            "privacy",
-            deviceId,
-            params.action,
-            params.service,
-        ];
+        const args = ["simctl", "privacy", deviceId, params.action, params.service];
         if (params.bundle_id) {
             args.push(params.bundle_id);
         }

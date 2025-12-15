@@ -23,8 +23,7 @@ export interface PasteboardResultData {
 
 export const simulatorPasteboardDefinition: ToolDefinition = {
   name: "simulator_pasteboard",
-  description:
-    "Read from or write to the simulator's clipboard (pasteboard)",
+  description: "Read from or write to the simulator's clipboard (pasteboard)",
   inputSchema: {
     type: "object",
     properties: {
@@ -108,11 +107,11 @@ export async function simulatorPasteboard(
               message: "Clipboard content retrieved",
               action: "paste",
               text,
-              note: text
-                ? `${text.length} characters`
-                : "Clipboard is empty",
+              note: text ? `${text.length} characters` : "Clipboard is empty",
             },
-            summary: text ? "Clipboard content retrieved" : "Clipboard is empty",
+            summary: text
+              ? "Clipboard content retrieved"
+              : "Clipboard is empty",
           };
         } else {
           return {

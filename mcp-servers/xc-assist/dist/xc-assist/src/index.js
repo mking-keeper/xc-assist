@@ -12,7 +12,6 @@ import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextpro
 import { simulatorScreenshot, simulatorScreenshotDefinition, } from "../../shared/tools/simulator/screenshot.js";
 import { simulatorOpenURL, simulatorOpenURLDefinition, } from "../../shared/tools/simulator/openurl.js";
 import { simulatorTerminateApp, simulatorTerminateAppDefinition, } from "../../shared/tools/simulator/terminate-app.js";
-import { simulatorGetAppContainer, simulatorGetAppContainerDefinition, } from "../../shared/tools/simulator/get-app-container.js";
 import { simulatorList, simulatorListDefinition, } from "../../shared/tools/simulator/list.js";
 import { simulatorLaunchApp, simulatorLaunchAppDefinition, } from "../../shared/tools/simulator/launch-app.js";
 import { simulatorPush, simulatorPushDefinition, } from "../../shared/tools/simulator/push.js";
@@ -60,7 +59,6 @@ class XCAssistServer {
                 // Simulator utilities
                 simulatorScreenshotDefinition,
                 simulatorOpenURLDefinition,
-                simulatorGetAppContainerDefinition,
                 // New tools
                 simulatorPushDefinition,
                 simulatorSetLocationDefinition,
@@ -171,15 +169,6 @@ class XCAssistServer {
                             {
                                 type: "text",
                                 text: JSON.stringify(await simulatorOpenURL(args)),
-                            },
-                        ],
-                    };
-                case "simulator_get_app_container":
-                    return {
-                        content: [
-                            {
-                                type: "text",
-                                text: JSON.stringify(await simulatorGetAppContainer(args)),
                             },
                         ],
                     };
