@@ -58,6 +58,10 @@ xc-assist/
 - `simulator_openurl` - Deep links
 - `simulator_get_app_container` - App sandbox
 
+## Code Style
+
+- Use `fs/promises` (async) instead of sync `fs` functions
+
 ## Development
 
 ```bash
