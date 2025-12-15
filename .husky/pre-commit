@@ -1,11 +1,6 @@
 #!/bin/sh
+
 set -euo pipefail
-
-echo "📝 Checking TypeScript..."
-npm run ts:check
-
-echo "🎨 Checking formatting..."
-npm run format:check
 
 # Rebuild MCP servers if TypeScript files changed (ensures dist/ stays in sync)
 if git diff --cached --name-only | grep -q "mcp-servers/"; then

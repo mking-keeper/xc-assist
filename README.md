@@ -113,6 +113,10 @@ The hook is configured in `.husky/pre-commit`. Husky is set up automatically whe
 |--------|-------------|
 | `npm run build` | Build all MCP servers |
 | `npm run clean` | Remove dist directories |
+| `npm test` | Run tests |
+| `npm run coverage` | Run tests with coverage report |
+| `npm run ts:check` | TypeScript type checking |
+| `npm run format:check` | Check code formatting with Prettier |
 
 ## Credits
 
