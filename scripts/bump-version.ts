@@ -1,12 +1,12 @@
 #!/usr/bin/env npx tsx
 
-import { readFile, writeFile } from 'fs/promises';
-import { execSync } from 'child_process';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { readFile, writeFile } from "fs/promises";
+import { execSync } from "child_process";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..');
+const ROOT = join(__dirname, "..");
 
 interface FileConfig {
   path: string;
@@ -15,13 +15,13 @@ interface FileConfig {
 
 // Files to update with their version paths
 const FILES: FileConfig[] = [
-  { path: 'package.json', keys: ['version'] },
-  { path: 'mcp-servers/package.json', keys: ['version'] },
-  { path: 'mcp-servers/xc-assist/package.json', keys: ['version'] },
-  { path: '.claude-plugin/plugin.json', keys: ['version'] },
+  { path: "package.json", keys: ["version"] },
+  { path: "mcp-servers/package.json", keys: ["version"] },
+  { path: "mcp-servers/xc-assist/package.json", keys: ["version"] },
+  { path: ".claude-plugin/plugin.json", keys: ["version"] },
   {
-    path: '.claude-plugin/marketplace.json',
-    keys: ['metadata.version', 'plugins.0.version'],
+    path: ".claude-plugin/marketplace.json",
+    keys: ["metadata.version", "plugins.0.version"],
   },
 ];
 
@@ -30,7 +30,7 @@ function isValidVersion(version: string): boolean {
 }
 
 function bumpPatch(version: string): string {
-  const parts = version.split('.');
+  const parts = version.split(".");
   if (parts.length !== 3) {
     throw new Error(`Invalid version format: ${version}`);
   }
@@ -45,16 +45,24 @@ function getNewVersion(currentVersion: string, arg?: string): string {
   if (isValidVersion(arg)) {
     return arg;
   }
-  console.error(`Error: Invalid version "${arg}". Use format X.Y.Z (e.g., 1.2.3)`);
+  console.error(
+    `Error: Invalid version "${arg}". Use format X.Y.Z (e.g., 1.2.3)`,
+  );
   process.exit(1);
 }
 
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-  return path.split('.').reduce((o, k) => (o as Record<string, unknown>)?.[k], obj);
+  return path
+    .split(".")
+    .reduce((o, k) => (o as Record<string, unknown>)?.[k], obj);
 }
 
-function setNestedValue(obj: Record<string, unknown>, path: string, value: string): void {
-  const keys = path.split('.');
+function setNestedValue(
+  obj: Record<string, unknown>,
+  path: string,
+  value: string,
+): void {
+  const keys = path.split(".");
   const last = keys.pop()!;
   const target = keys.reduce((o, k) => o[k] as Record<string, unknown>, obj);
   target[last] = value;
@@ -62,20 +70,23 @@ function setNestedValue(obj: Record<string, unknown>, path: string, value: strin
 
 async function readJson(filePath: string): Promise<Record<string, unknown>> {
   const fullPath = join(ROOT, filePath);
-  const content = await readFile(fullPath, 'utf8');
+  const content = await readFile(fullPath, "utf8");
   return JSON.parse(content);
 }
 
-async function writeJson(filePath: string, data: Record<string, unknown>): Promise<void> {
+async function writeJson(
+  filePath: string,
+  data: Record<string, unknown>,
+): Promise<void> {
   const fullPath = join(ROOT, filePath);
-  await writeFile(fullPath, JSON.stringify(data, null, 2) + '\n');
+  await writeFile(fullPath, JSON.stringify(data, null, 2) + "\n");
 }
 
 async function main(): Promise<void> {
   const arg = process.argv[2];
 
   // Get current version from root package.json
-  const rootPkg = await readJson('package.json');
+  const rootPkg = await readJson("package.json");
   const currentVersion = rootPkg.version as string;
   const newVersion = getNewVersion(currentVersion, arg);
 
@@ -92,20 +103,20 @@ async function main(): Promise<void> {
     await writeJson(path, data);
   }
 
-  console.log('\nCreating git commit and tag...');
+  console.log("\nCreating git commit and tag...");
 
   // Stage all changed files
-  const filePaths = FILES.map((f) => f.path).join(' ');
-  execSync(`git add ${filePaths}`, { cwd: ROOT, stdio: 'inherit' });
+  const filePaths = FILES.map((f) => f.path).join(" ");
+  execSync(`git add ${filePaths}`, { cwd: ROOT, stdio: "inherit" });
 
   // Commit
   execSync(`git commit -m "chore: bump version to ${newVersion}"`, {
     cwd: ROOT,
-    stdio: 'inherit',
+    stdio: "inherit",
   });
 
   // Tag
-  execSync(`git tag v${newVersion}`, { cwd: ROOT, stdio: 'inherit' });
+  execSync(`git tag v${newVersion}`, { cwd: ROOT, stdio: "inherit" });
 
   console.log(`\nDone! Created commit and tag v${newVersion}`);
   console.log(`\nTo push: git push && git push --tags`);
