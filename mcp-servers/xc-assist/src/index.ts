@@ -38,6 +38,22 @@ import {
   simulatorLaunchApp,
   simulatorLaunchAppDefinition,
 } from "../../shared/tools/simulator/launch-app.js";
+import {
+  simulatorPush,
+  simulatorPushDefinition,
+} from "../../shared/tools/simulator/push.js";
+import {
+  simulatorSetLocation,
+  simulatorSetLocationDefinition,
+} from "../../shared/tools/simulator/location.js";
+import {
+  simulatorPrivacy,
+  simulatorPrivacyDefinition,
+} from "../../shared/tools/simulator/privacy.js";
+import {
+  simulatorPasteboard,
+  simulatorPasteboardDefinition,
+} from "../../shared/tools/simulator/pasteboard.js";
 
 // Import IDB tools
 import {
@@ -58,6 +74,10 @@ import {
   idbCheckQuality,
   idbCheckQualityDefinition,
 } from "../../shared/tools/idb/check-quality.js";
+import {
+  idbListApps,
+  idbListAppsDefinition,
+} from "../../shared/tools/idb/list-apps.js";
 
 class XCAssistServer {
   private server: Server;
@@ -90,6 +110,7 @@ class XCAssistServer {
         idbDescribeDefinition,
         idbFindElementDefinition,
         idbCheckQualityDefinition,
+        idbListAppsDefinition,
         // UI interaction
         idbTapDefinition,
         idbInputDefinition,
@@ -98,6 +119,11 @@ class XCAssistServer {
         simulatorScreenshotDefinition,
         simulatorOpenURLDefinition,
         simulatorGetAppContainerDefinition,
+        // New tools
+        simulatorPushDefinition,
+        simulatorSetLocationDefinition,
+        simulatorPrivacyDefinition,
+        simulatorPasteboardDefinition,
       ],
     }));
 
@@ -275,6 +301,77 @@ class XCAssistServer {
                     args as unknown as Parameters<
                       typeof simulatorGetAppContainer
                     >[0],
+                  ),
+                ),
+              },
+            ],
+          };
+
+        // New tools
+        case "simulator_push":
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(
+                  await simulatorPush(
+                    args as unknown as Parameters<typeof simulatorPush>[0],
+                  ),
+                ),
+              },
+            ],
+          };
+
+        case "simulator_set_location":
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(
+                  await simulatorSetLocation(
+                    args as unknown as Parameters<typeof simulatorSetLocation>[0],
+                  ),
+                ),
+              },
+            ],
+          };
+
+        case "simulator_privacy":
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(
+                  await simulatorPrivacy(
+                    args as unknown as Parameters<typeof simulatorPrivacy>[0],
+                  ),
+                ),
+              },
+            ],
+          };
+
+        case "simulator_pasteboard":
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(
+                  await simulatorPasteboard(
+                    args as unknown as Parameters<typeof simulatorPasteboard>[0],
+                  ),
+                ),
+              },
+            ],
+          };
+
+        case "idb_list_apps":
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(
+                  await idbListApps(
+                    args as unknown as Parameters<typeof idbListApps>[0],
                   ),
                 ),
               },

@@ -15,6 +15,10 @@ import { simulatorTerminateApp, simulatorTerminateAppDefinition, } from "../../s
 import { simulatorGetAppContainer, simulatorGetAppContainerDefinition, } from "../../shared/tools/simulator/get-app-container.js";
 import { simulatorList, simulatorListDefinition, } from "../../shared/tools/simulator/list.js";
 import { simulatorLaunchApp, simulatorLaunchAppDefinition, } from "../../shared/tools/simulator/launch-app.js";
+import { simulatorPush, simulatorPushDefinition, } from "../../shared/tools/simulator/push.js";
+import { simulatorSetLocation, simulatorSetLocationDefinition, } from "../../shared/tools/simulator/location.js";
+import { simulatorPrivacy, simulatorPrivacyDefinition, } from "../../shared/tools/simulator/privacy.js";
+import { simulatorPasteboard, simulatorPasteboardDefinition, } from "../../shared/tools/simulator/pasteboard.js";
 // Import IDB tools
 import { idbDescribe, idbDescribeDefinition, } from "../../shared/tools/idb/describe.js";
 import { idbTap, idbTapDefinition } from "../../shared/tools/idb/tap.js";
@@ -22,6 +26,7 @@ import { idbInput, idbInputDefinition } from "../../shared/tools/idb/input.js";
 import { idbGesture, idbGestureDefinition, } from "../../shared/tools/idb/gesture.js";
 import { idbFindElement, idbFindElementDefinition, } from "../../shared/tools/idb/find-element.js";
 import { idbCheckQuality, idbCheckQualityDefinition, } from "../../shared/tools/idb/check-quality.js";
+import { idbListApps, idbListAppsDefinition, } from "../../shared/tools/idb/list-apps.js";
 class XCAssistServer {
     server;
     constructor() {
@@ -47,6 +52,7 @@ class XCAssistServer {
                 idbDescribeDefinition,
                 idbFindElementDefinition,
                 idbCheckQualityDefinition,
+                idbListAppsDefinition,
                 // UI interaction
                 idbTapDefinition,
                 idbInputDefinition,
@@ -55,6 +61,11 @@ class XCAssistServer {
                 simulatorScreenshotDefinition,
                 simulatorOpenURLDefinition,
                 simulatorGetAppContainerDefinition,
+                // New tools
+                simulatorPushDefinition,
+                simulatorSetLocationDefinition,
+                simulatorPrivacyDefinition,
+                simulatorPasteboardDefinition,
             ],
         }));
         this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -169,6 +180,52 @@ class XCAssistServer {
                             {
                                 type: "text",
                                 text: JSON.stringify(await simulatorGetAppContainer(args)),
+                            },
+                        ],
+                    };
+                // New tools
+                case "simulator_push":
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: JSON.stringify(await simulatorPush(args)),
+                            },
+                        ],
+                    };
+                case "simulator_set_location":
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: JSON.stringify(await simulatorSetLocation(args)),
+                            },
+                        ],
+                    };
+                case "simulator_privacy":
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: JSON.stringify(await simulatorPrivacy(args)),
+                            },
+                        ],
+                    };
+                case "simulator_pasteboard":
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: JSON.stringify(await simulatorPasteboard(args)),
+                            },
+                        ],
+                    };
+                case "idb_list_apps":
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: JSON.stringify(await idbListApps(args)),
                             },
                         ],
                     };
