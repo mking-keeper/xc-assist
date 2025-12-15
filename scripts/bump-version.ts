@@ -103,10 +103,17 @@ async function main(): Promise<void> {
     await writeJson(path, data);
   }
 
+  // Format files with Prettier
+  const filePaths = FILES.map((f) => f.path).join(" ");
+  console.log("\nFormatting with Prettier...");
+  execSync(`npx prettier --write ${filePaths}`, {
+    cwd: ROOT,
+    stdio: "inherit",
+  });
+
   console.log("\nCreating git commit and tag...");
 
   // Stage all changed files
-  const filePaths = FILES.map((f) => f.path).join(" ");
   execSync(`git add ${filePaths}`, { cwd: ROOT, stdio: "inherit" });
 
   // Commit
