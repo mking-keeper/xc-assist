@@ -78,11 +78,11 @@ export async function simulatorPasteboard(params) {
                             message: "Clipboard content retrieved",
                             action: "paste",
                             text,
-                            note: text
-                                ? `${text.length} characters`
-                                : "Clipboard is empty",
+                            note: text ? `${text.length} characters` : "Clipboard is empty",
                         },
-                        summary: text ? "Clipboard content retrieved" : "Clipboard is empty",
+                        summary: text
+                            ? "Clipboard content retrieved"
+                            : "Clipboard is empty",
                     };
                 }
                 else {

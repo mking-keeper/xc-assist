@@ -46,7 +46,8 @@ export const simulatorPushDefinition: ToolDefinition = {
       },
       bundle_id: {
         type: "string",
-        description: "Bundle identifier of the target app (e.g., com.example.app)",
+        description:
+          "Bundle identifier of the target app (e.g., com.example.app)",
       },
       payload: {
         type: "object",
@@ -110,10 +111,7 @@ export async function simulatorPush(
     const deviceId = params.device_id || "booted";
 
     // Write payload to temp file (simctl requires a file or stdin)
-    const tempFile = path.join(
-      os.tmpdir(),
-      `push-${Date.now()}.json`,
-    );
+    const tempFile = path.join(os.tmpdir(), `push-${Date.now()}.json`);
     await writeFile(tempFile, JSON.stringify(params.payload, null, 2));
 
     try {
@@ -130,9 +128,10 @@ export async function simulatorPush(
         const data: PushResultData = {
           message: "Push notification sent successfully",
           bundle_id: params.bundle_id,
-          note: typeof params.payload.aps.alert === "string"
-            ? params.payload.aps.alert
-            : params.payload.aps.alert?.body || "Notification sent",
+          note:
+            typeof params.payload.aps.alert === "string"
+              ? params.payload.aps.alert
+              : params.payload.aps.alert?.body || "Notification sent",
         };
 
         return {

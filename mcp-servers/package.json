@@ -20,7 +20,5 @@
   "workspaces": [
     "xc-assist"
   ],
-  "devDependencies": {
-    "@types/node": "^20.0.0"
-  }
+  "devDependencies": {}
 }
