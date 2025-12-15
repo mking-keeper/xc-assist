@@ -5,7 +5,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { simulatorPush } from "../../../shared/tools/simulator/push.js";
 import * as commandUtils from "../../../shared/utils/command.js";
-import * as fs from "fs";
+import * as fsPromises from "fs/promises";
 
 vi.mock("../../../shared/utils/command", async () => {
   const actual = await vi.importActual("../../../shared/utils/command");
@@ -15,12 +15,12 @@ vi.mock("../../../shared/utils/command", async () => {
   };
 });
 
-vi.mock("fs", async () => {
-  const actual = await vi.importActual("fs");
+vi.mock("fs/promises", async () => {
+  const actual = await vi.importActual("fs/promises");
   return {
     ...actual,
-    writeFileSync: vi.fn(),
-    unlinkSync: vi.fn(),
+    writeFile: vi.fn().mockResolvedValue(undefined),
+    unlink: vi.fn().mockResolvedValue(undefined),
   };
 });
 
@@ -146,7 +146,7 @@ describe("simulatorPush", () => {
 
   it("should write payload to temp file", async () => {
     const mockRunCommand = vi.mocked(commandUtils.runCommand);
-    const mockWriteFileSync = vi.mocked(fs.writeFileSync);
+    const mockWriteFile = vi.mocked(fsPromises.writeFile);
     mockRunCommand.mockResolvedValue({
       stdout: "",
       stderr: "",
@@ -159,7 +159,7 @@ describe("simulatorPush", () => {
       payload,
     });
 
-    expect(mockWriteFileSync).toHaveBeenCalledWith(
+    expect(mockWriteFile).toHaveBeenCalledWith(
       expect.stringContaining("push-"),
       JSON.stringify(payload, null, 2),
     );
@@ -167,7 +167,7 @@ describe("simulatorPush", () => {
 
   it("should clean up temp file after success", async () => {
     const mockRunCommand = vi.mocked(commandUtils.runCommand);
-    const mockUnlinkSync = vi.mocked(fs.unlinkSync);
+    const mockUnlink = vi.mocked(fsPromises.unlink);
     mockRunCommand.mockResolvedValue({
       stdout: "",
       stderr: "",
@@ -179,12 +179,12 @@ describe("simulatorPush", () => {
       payload: { aps: { alert: "test" } },
     });
 
-    expect(mockUnlinkSync).toHaveBeenCalled();
+    expect(mockUnlink).toHaveBeenCalled();
   });
 
   it("should clean up temp file after failure", async () => {
     const mockRunCommand = vi.mocked(commandUtils.runCommand);
-    const mockUnlinkSync = vi.mocked(fs.unlinkSync);
+    const mockUnlink = vi.mocked(fsPromises.unlink);
     mockRunCommand.mockResolvedValue({
       stdout: "",
       stderr: "Failed",
@@ -196,7 +196,7 @@ describe("simulatorPush", () => {
       payload: { aps: { alert: "test" } },
     });
 
-    expect(mockUnlinkSync).toHaveBeenCalled();
+    expect(mockUnlink).toHaveBeenCalled();
   });
 
   it("should handle command failures", async () => {

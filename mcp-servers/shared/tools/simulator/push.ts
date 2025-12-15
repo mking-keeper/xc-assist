@@ -4,7 +4,7 @@
  * Send simulated push notifications to an app
  */
 
-import * as fs from "fs";
+import { writeFile, unlink } from "fs/promises";
 import * as os from "os";
 import * as path from "path";
 import type { ToolDefinition, ToolResult } from "../../types/base.js";
@@ -114,7 +114,7 @@ export async function simulatorPush(
       os.tmpdir(),
       `push-${Date.now()}.json`,
     );
-    fs.writeFileSync(tempFile, JSON.stringify(params.payload, null, 2));
+    await writeFile(tempFile, JSON.stringify(params.payload, null, 2));
 
     try {
       logger.info(`Sending push to ${params.bundle_id} on ${deviceId}`);
@@ -150,7 +150,7 @@ export async function simulatorPush(
     } finally {
       // Clean up temp file
       try {
-        fs.unlinkSync(tempFile);
+        await unlink(tempFile);
       } catch {
         // Ignore cleanup errors
       }
