@@ -1,6 +1,6 @@
 {
   "name": "@xclaude/xc-assist",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "iOS Simulator testing MCP for build, lifecycle, UI automation",
   "type": "module",
   "main": "dist/index.js",
