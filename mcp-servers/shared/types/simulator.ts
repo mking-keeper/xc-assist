@@ -3,25 +3,10 @@
  */
 
 /**
- * Device lifecycle operations
- */
-export type DeviceLifecycleOperation =
-  | "boot"
-  | "shutdown"
-  | "create"
-  | "delete"
-  | "erase"
-  | "clone";
-
-/**
- * Device lifecycle parameters
+ * Device lifecycle parameters (boot, shutdown)
  */
 export interface DeviceLifecycleParams {
   device_id?: string;
-  device_name?: string;
-  device_type?: string;
-  runtime?: string;
-  new_name?: string;
 }
 
 /**
@@ -72,15 +57,6 @@ export interface IOParams {
 }
 
 /**
- * Push notification parameters
- */
-export interface PushParams {
-  device_id?: string;
-  app_identifier: string;
-  payload: string; // JSON string or file path
-}
-
-/**
  * Open URL parameters
  */
 export interface OpenURLParams {
@@ -95,13 +71,6 @@ export interface GetAppContainerParams {
   device_id?: string;
   app_identifier: string;
   container_type?: "data" | "bundle" | "group";
-}
-
-/**
- * Health check parameters
- */
-export interface HealthCheckParams {
-  // No parameters needed
 }
 
 /**
@@ -151,14 +120,4 @@ export interface IOResultData {
   message: string;
   output_path?: string;
   note?: string;
-}
-
-/**
- * Health check result
- */
-export interface HealthCheckResultData {
-  xcode_installed: boolean;
-  simctl_available: boolean;
-  issues: string[];
-  message: string;
 }
