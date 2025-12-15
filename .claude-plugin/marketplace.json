@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "iOS Simulator testing plugin for Claude Code",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "xc-assist",
       "source": "./",
       "description": "iOS Simulator testing: build, lifecycle, UI automation, gestures, deep links",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "mking-keeper",
         "url": "https://github.com/mking-keeper"

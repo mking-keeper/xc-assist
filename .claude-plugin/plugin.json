@@ -1,6 +1,6 @@
 {
   "name": "xc-assist",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "iOS Simulator testing: build, lifecycle, UI automation, gestures, deep links",
   "author": {
     "name": "mking-keeper",
@@ -23,7 +23,9 @@
   "mcpServers": {
     "xc-assist": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-servers/xc-assist/dist/index.js"],
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/mcp-servers/xc-assist/dist/index.js"
+      ],
       "env": {
         "XC_LOG_LEVEL": "info"
       }

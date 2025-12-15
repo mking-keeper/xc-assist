@@ -1,6 +1,6 @@
 {
   "name": "@xclaude/mcp-servers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Root package for all xc-assist MCP servers",
   "private": true,
   "type": "module",
