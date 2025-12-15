@@ -26,14 +26,6 @@ export interface SimulatorUsage {
   count: number;
 }
 
-/**
- * Merged configuration with precedence info
- */
-export interface MergedConfig extends XCPluginConfig {
-  /** Source of the configuration */
-  source: "user" | "project" | "merged";
-}
-
 const USER_CONFIG_DIR = path.join(os.homedir(), ".xcplugin");
 const USER_CONFIG_FILE = path.join(USER_CONFIG_DIR, "config.json");
 const PROJECT_CONFIG_FILE = ".xcplugin";
@@ -48,15 +40,12 @@ const DEFAULT_CONFIG: XCPluginConfig = {
 
 /**
  * Loads user-level configuration from ~/.xcplugin/config.json
- *
- * @returns User configuration or empty object if not found
  */
 async function loadUserConfig(): Promise<XCPluginConfig> {
   try {
     const content = await fs.readFile(USER_CONFIG_FILE, "utf-8");
     return JSON.parse(content);
   } catch (error) {
-    // File doesn't exist or is invalid - return empty config
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return {};
     }
@@ -67,9 +56,6 @@ async function loadUserConfig(): Promise<XCPluginConfig> {
 
 /**
  * Loads project-level configuration from .xcplugin in project root
- *
- * @param projectPath - Path to the project directory (defaults to cwd)
- * @returns Project configuration or empty object if not found
  */
 async function loadProjectConfig(
   projectPath?: string,
@@ -83,40 +69,12 @@ async function loadProjectConfig(
     const content = await fs.readFile(configPath, "utf-8");
     return JSON.parse(content);
   } catch (error) {
-    // File doesn't exist or is invalid - return empty config
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return {};
     }
     console.warn(`Failed to load project config: ${(error as Error).message}`);
     return {};
   }
-}
-
-/**
- * Loads and merges configuration from both user and project levels
- * Project config takes precedence over user config
- *
- * @param projectPath - Path to the project directory (defaults to cwd)
- * @returns Merged configuration
- */
-export async function loadConfig(projectPath?: string): Promise<MergedConfig> {
-  const userConfig = await loadUserConfig();
-  const projectConfig = await loadProjectConfig(projectPath);
-
-  // Merge configurations (project overrides user)
-  const merged: MergedConfig = {
-    ...DEFAULT_CONFIG,
-    ...userConfig,
-    ...projectConfig,
-    source:
-      Object.keys(projectConfig).length > 0
-        ? "project"
-        : Object.keys(userConfig).length > 0
-          ? "user"
-          : "merged",
-  };
-
-  return merged;
 }
 
 /**
@@ -132,7 +90,9 @@ export async function saveUsage(
 ): Promise<void> {
   try {
     // Load current config
-    const config = await loadConfig(projectPath);
+    const userConfig = await loadUserConfig();
+    const projectConfig = await loadProjectConfig(projectPath);
+    const config = { ...DEFAULT_CONFIG, ...userConfig, ...projectConfig };
     const maxHistory =
       config.maxRecentHistory || DEFAULT_CONFIG.maxRecentHistory || 10;
 
@@ -169,7 +129,6 @@ export async function saveUsage(
     const trimmedRecentSimulators = recentSimulators.slice(0, maxHistory);
 
     // Save back to user config (we track usage globally, not per-project)
-    const userConfig = await loadUserConfig();
     const updatedConfig: XCPluginConfig = {
       ...userConfig,
       recentSimulators: trimmedRecentSimulators,
@@ -188,43 +147,4 @@ export async function saveUsage(
     console.warn(`Failed to save usage: ${(error as Error).message}`);
     // Don't throw - usage tracking is non-critical
   }
-}
-
-/**
- * Gets the default simulator from config or recent usage
- * Returns undefined if no default is configured and no recent usage exists
- *
- * @param projectPath - Optional project path to check for project-specific default
- * @returns Default simulator destination string or undefined
- */
-export async function getDefaultSimulator(
-  projectPath?: string,
-): Promise<string | undefined> {
-  const config = await loadConfig(projectPath);
-
-  // Priority 1: Explicit default from config
-  if (config.defaultSimulator) {
-    return config.defaultSimulator;
-  }
-
-  // Priority 2: Most recently used simulator
-  if (config.recentSimulators && config.recentSimulators.length > 0) {
-    return config.recentSimulators[0].destination;
-  }
-
-  // No default available
-  return undefined;
-}
-
-/**
- * Gets recently used simulators sorted by last use
- *
- * @param limit - Maximum number of recent simulators to return
- * @returns Array of recent simulator usage entries
- */
-export async function getRecentSimulators(
-  limit = 5,
-): Promise<SimulatorUsage[]> {
-  const config = await loadConfig();
-  return (config.recentSimulators || []).slice(0, limit);
 }

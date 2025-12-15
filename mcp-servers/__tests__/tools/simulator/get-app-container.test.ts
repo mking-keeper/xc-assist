@@ -22,7 +22,8 @@ describe("simulatorGetAppContainer", () => {
   it("should get app container path with app_identifier", async () => {
     const mockRunCommand = vi.mocked(commandUtils.runCommand);
     mockRunCommand.mockResolvedValue({
-      stdout: "/Users/test/Library/Developer/CoreSimulator/Devices/ABC-123/data/Containers/Data/Application/XYZ-789\n",
+      stdout:
+        "/Users/test/Library/Developer/CoreSimulator/Devices/ABC-123/data/Containers/Data/Application/XYZ-789\n",
       stderr: "",
       code: 0,
     });
