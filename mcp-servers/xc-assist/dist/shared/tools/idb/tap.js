@@ -3,32 +3,32 @@
  *
  * Tap at coordinates (use after describe to get coordinates)
  */
-import { runCommand } from '../../utils/command.js';
-import { logger } from '../../utils/logger.js';
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 export const idbTapDefinition = {
-    name: 'idb_tap',
-    description: 'Tap at UI coordinates',
+    name: "idb_tap",
+    description: "Tap at UI coordinates",
     inputSchema: {
-        type: 'object',
+        type: "object",
         properties: {
             target: {
-                type: 'string',
+                type: "string",
                 description: 'Target device (default: "booted")',
             },
             x: {
-                type: 'number',
-                description: 'X coordinate',
+                type: "number",
+                description: "X coordinate",
             },
             y: {
-                type: 'number',
-                description: 'Y coordinate',
+                type: "number",
+                description: "Y coordinate",
             },
             duration: {
-                type: 'number',
-                description: 'Tap duration in seconds (default: 0.1)',
+                type: "number",
+                description: "Tap duration in seconds (default: 0.1)",
             },
         },
-        required: ['x', 'y'],
+        required: ["x", "y"],
     },
 };
 export async function idbTap(params) {
@@ -37,28 +37,28 @@ export async function idbTap(params) {
         if (params.x === undefined || params.y === undefined) {
             return {
                 success: false,
-                error: 'x and y coordinates required',
-                operation: 'tap',
+                error: "x and y coordinates required",
+                operation: "tap",
             };
         }
-        const target = params.target || 'booted';
+        const target = params.target || "booted";
         const duration = params.duration || 0.1;
         // Execute tap command
         logger.info(`Tapping at (${params.x}, ${params.y})`);
-        const result = await runCommand('idb', [
-            'ui',
-            'tap',
+        const result = await runCommand("idb", [
+            "ui",
+            "tap",
             String(Math.round(params.x)),
             String(Math.round(params.y)),
-            '--target',
+            "--target",
             target,
-            '--duration',
+            "--duration",
             String(duration),
         ]);
         const data = {
-            message: 'Tap executed successfully',
+            message: "Tap executed successfully",
             coordinates: { x: params.x, y: params.y },
-            note: 'UI interaction complete',
+            note: "UI interaction complete",
         };
         if (result.code === 0) {
             return {
@@ -70,17 +70,17 @@ export async function idbTap(params) {
         else {
             return {
                 success: false,
-                error: 'Tap failed',
+                error: "Tap failed",
                 details: result.stderr,
             };
         }
     }
     catch (error) {
-        logger.error('Tap failed', error);
+        logger.error("Tap failed", error);
         return {
             success: false,
             error: String(error),
-            operation: 'tap',
+            operation: "tap",
         };
     }
 }

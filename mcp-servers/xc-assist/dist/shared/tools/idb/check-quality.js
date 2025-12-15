@@ -3,16 +3,16 @@
  *
  * Assess accessibility data quality (determines if screenshot needed)
  */
-import { runCommand } from '../../utils/command.js';
-import { logger } from '../../utils/logger.js';
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 export const idbCheckQualityDefinition = {
-    name: 'idb_check_quality',
-    description: 'Check accessibility data quality (use before deciding on screenshot)',
+    name: "idb_check_quality",
+    description: "Check accessibility data quality (use before deciding on screenshot)",
     inputSchema: {
-        type: 'object',
+        type: "object",
         properties: {
             target: {
-                type: 'string',
+                type: "string",
                 description: 'Target device (default: "booted")',
             },
         },
@@ -20,10 +20,16 @@ export const idbCheckQualityDefinition = {
 };
 export async function idbCheckQuality(params) {
     try {
-        const target = params.target || 'booted';
+        const target = params.target || "booted";
         // Execute describe to get all elements
-        logger.info('Checking accessibility quality');
-        const result = await runCommand('idb', ['ui', 'describe-all', '--target', target, '--json']);
+        logger.info("Checking accessibility quality");
+        const result = await runCommand("idb", [
+            "ui",
+            "describe-all",
+            "--target",
+            target,
+            "--json",
+        ]);
         // Parse and analyze
         const json = JSON.parse(result.stdout);
         let totalElements = 0;
@@ -32,21 +38,22 @@ export async function idbCheckQuality(params) {
         if (Array.isArray(json)) {
             totalElements = json.length;
             labeledElements = json.filter((e) => e.label && e.label.length > 0).length;
-            interactiveElements = json.filter((e) => e.type?.includes('Button') || e.type?.includes('TextField')).length;
+            interactiveElements = json.filter((e) => e.type?.includes("Button") || e.type?.includes("TextField")).length;
         }
         // Calculate quality score
         const labelRatio = totalElements > 0 ? labeledElements / totalElements : 0;
         const score = Math.round(labelRatio * 100);
         // Determine recommendation
-        let recommendation = '';
+        let recommendation = "";
         if (score >= 70) {
-            recommendation = 'Accessibility data sufficient - use idb_describe';
+            recommendation = "Accessibility data sufficient - use idb_describe";
         }
         else if (score >= 40) {
-            recommendation = 'Moderate accessibility - try idb_describe first, screenshot if needed';
+            recommendation =
+                "Moderate accessibility - try idb_describe first, screenshot if needed";
         }
         else {
-            recommendation = 'Poor accessibility data - screenshot recommended';
+            recommendation = "Poor accessibility data - screenshot recommended";
         }
         const data = {
             score,
@@ -63,11 +70,11 @@ export async function idbCheckQuality(params) {
         };
     }
     catch (error) {
-        logger.error('Check quality failed', error);
+        logger.error("Check quality failed", error);
         return {
             success: false,
             error: String(error),
-            operation: 'check-quality',
+            operation: "check-quality",
         };
     }
 }

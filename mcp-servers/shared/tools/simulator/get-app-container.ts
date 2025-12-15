@@ -4,54 +4,59 @@
  * Get filesystem path to app container
  */
 
-import type { ToolDefinition, ToolResult } from '../../types/base.js';
-import type { GetAppContainerParams, IOResultData } from '../../types/simulator.js';
-import { runCommand } from '../../utils/command.js';
-import { logger } from '../../utils/logger.js';
+import type { ToolDefinition, ToolResult } from "../../types/base.js";
+import type {
+  GetAppContainerParams,
+  IOResultData,
+} from "../../types/simulator.js";
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 
 export const simulatorGetAppContainerDefinition: ToolDefinition = {
-  name: 'simulator_get_app_container',
-  description: 'Get app container filesystem path',
+  name: "simulator_get_app_container",
+  description: "Get app container filesystem path",
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
       device_id: {
-        type: 'string',
+        type: "string",
         description: 'Device UDID or "booted" for active simulator',
       },
       app_identifier: {
-        type: 'string',
-        description: 'App bundle identifier',
+        type: "string",
+        description: "App bundle identifier",
       },
       container_type: {
-        type: 'string',
-        enum: ['data', 'bundle', 'group'],
-        description: 'Container type (default: data)',
+        type: "string",
+        enum: ["data", "bundle", "group"],
+        description: "Container type (default: data)",
       },
     },
-    required: ['app_identifier'],
+    required: ["app_identifier"],
   },
 };
 
 export async function simulatorGetAppContainer(
-  params: GetAppContainerParams
+  params: GetAppContainerParams,
 ): Promise<ToolResult<IOResultData>> {
   try {
     if (!params.app_identifier) {
       return {
         success: false,
-        error: 'app_identifier required',
-        operation: 'get-app-container',
+        error: "app_identifier required",
+        operation: "get-app-container",
       };
     }
 
-    const deviceId = params.device_id || 'booted';
-    const containerType = params.container_type || 'data';
+    const deviceId = params.device_id || "booted";
+    const containerType = params.container_type || "data";
 
-    logger.info(`Getting ${containerType} container for ${params.app_identifier}`);
-    const result = await runCommand('xcrun', [
-      'simctl',
-      'get_app_container',
+    logger.info(
+      `Getting ${containerType} container for ${params.app_identifier}`,
+    );
+    const result = await runCommand("xcrun", [
+      "simctl",
+      "get_app_container",
       deviceId,
       params.app_identifier,
       containerType,
@@ -60,7 +65,7 @@ export async function simulatorGetAppContainer(
     const containerPath = result.stdout.trim();
 
     const data: IOResultData = {
-      message: 'Container path retrieved',
+      message: "Container path retrieved",
       output_path: containerPath,
       note: `${containerType} container: ${containerPath}`,
     };
@@ -69,21 +74,21 @@ export async function simulatorGetAppContainer(
       return {
         success: true as const,
         data,
-        summary: 'Path retrieved',
+        summary: "Path retrieved",
       };
     } else {
       return {
         success: false as const,
-        error: 'Failed to retrieve container path',
+        error: "Failed to retrieve container path",
         details: result.stderr,
       };
     }
   } catch (error) {
-    logger.error('Get app container failed', error as Error);
+    logger.error("Get app container failed", error as Error);
     return {
       success: false,
       error: String(error),
-      operation: 'get-app-container',
+      operation: "get-app-container",
     };
   }
 }

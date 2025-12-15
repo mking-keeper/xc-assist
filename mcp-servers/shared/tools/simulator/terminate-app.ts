@@ -4,49 +4,57 @@
  * Terminate a running app
  */
 
-import type { ToolDefinition, ToolResult } from '../../types/base.js';
-import type { AppLifecycleParams, AppLifecycleResultData } from '../../types/simulator.js';
-import { runCommand } from '../../utils/command.js';
-import { logger } from '../../utils/logger.js';
+import type { ToolDefinition, ToolResult } from "../../types/base.js";
+import type {
+  AppLifecycleParams,
+  AppLifecycleResultData,
+} from "../../types/simulator.js";
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 
 export const simulatorTerminateAppDefinition: ToolDefinition = {
-  name: 'simulator_terminate_app',
-  description: 'Terminate a running app on simulator',
+  name: "simulator_terminate_app",
+  description: "Terminate a running app on simulator",
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
       device_id: {
-        type: 'string',
+        type: "string",
         description: 'Device UDID or "booted" for active simulator',
       },
       app_identifier: {
-        type: 'string',
+        type: "string",
         description: 'App bundle identifier (e.g. "com.example.MyApp")',
       },
     },
-    required: ['app_identifier'],
+    required: ["app_identifier"],
   },
 };
 
 export async function simulatorTerminateApp(
-  params: AppLifecycleParams
+  params: AppLifecycleParams,
 ): Promise<ToolResult<AppLifecycleResultData>> {
   try {
     if (!params.app_identifier) {
       return {
         success: false,
-        error: 'app_identifier required',
-        operation: 'terminate-app',
+        error: "app_identifier required",
+        operation: "terminate-app",
       };
     }
 
-    const deviceId = params.device_id || 'booted';
+    const deviceId = params.device_id || "booted";
 
     logger.info(`Terminating app ${params.app_identifier} on ${deviceId}`);
-    const result = await runCommand('xcrun', ['simctl', 'terminate', deviceId, params.app_identifier]);
+    const result = await runCommand("xcrun", [
+      "simctl",
+      "terminate",
+      deviceId,
+      params.app_identifier,
+    ]);
 
     const data: AppLifecycleResultData = {
-      message: 'App terminated successfully',
+      message: "App terminated successfully",
       app_identifier: params.app_identifier,
     };
 
@@ -54,7 +62,7 @@ export async function simulatorTerminateApp(
       return {
         success: true as const,
         data,
-        summary: 'App terminated',
+        summary: "App terminated",
       };
     } else {
       return {
@@ -64,11 +72,11 @@ export async function simulatorTerminateApp(
       };
     }
   } catch (error) {
-    logger.error('Terminate app failed', error as Error);
+    logger.error("Terminate app failed", error as Error);
     return {
       success: false,
       error: String(error),
-      operation: 'terminate-app',
+      operation: "terminate-app",
     };
   }
 }

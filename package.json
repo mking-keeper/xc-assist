@@ -9,6 +9,10 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "clean": "rm -rf mcp-servers/*/dist",
+    "test": "cd mcp-servers && npm run test",
+    "coverage": "cd mcp-servers && npm run coverage",
+    "ts:check": "cd mcp-servers && npm run ts:check",
+    "format:check": "prettier --check .",
     "prepare": "husky"
   },
   "keywords": [
@@ -30,9 +34,12 @@
   },
   "devDependencies": {
     "@types/node": "24.10.0",
+    "@vitest/coverage-v8": "^1.6.0",
     "esbuild": "^0.21.5",
     "husky": "^9.1.7",
-    "typescript": "5.9.3"
+    "prettier": "^3.6.2",
+    "typescript": "5.9.3",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.21.0"

@@ -3,20 +3,20 @@
  *
  * Boot a simulator device
  */
-import { runCommand } from '../../utils/command.js';
-import { logger } from '../../utils/logger.js';
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 export const simulatorBootDefinition = {
-    name: 'simulator_boot',
-    description: 'Boot a simulator device',
+    name: "simulator_boot",
+    description: "Boot a simulator device",
     inputSchema: {
-        type: 'object',
+        type: "object",
         properties: {
             device_id: {
-                type: 'string',
+                type: "string",
                 description: 'Device UDID or name (e.g. "iPhone 15" or full UDID)',
             },
         },
-        required: ['device_id'],
+        required: ["device_id"],
     },
 };
 export async function simulatorBoot(params) {
@@ -25,39 +25,43 @@ export async function simulatorBoot(params) {
         if (!params.device_id) {
             return {
                 success: false,
-                error: 'device_id required',
-                operation: 'boot',
+                error: "device_id required",
+                operation: "boot",
             };
         }
         // Execute boot command
         logger.info(`Booting simulator: ${params.device_id}`);
-        const result = await runCommand('xcrun', ['simctl', 'boot', params.device_id]);
+        const result = await runCommand("xcrun", [
+            "simctl",
+            "boot",
+            params.device_id,
+        ]);
         const data = {
             message: `Device booted successfully`,
             device_id: params.device_id,
-            note: 'Device is starting up',
+            note: "Device is starting up",
         };
         if (result.code === 0) {
             return {
                 success: true,
                 data,
-                summary: 'Device booted',
+                summary: "Device booted",
             };
         }
         else {
             return {
                 success: false,
-                error: 'Boot failed',
+                error: "Boot failed",
                 details: result.stderr,
             };
         }
     }
     catch (error) {
-        logger.error('Boot failed', error);
+        logger.error("Boot failed", error);
         return {
             success: false,
             error: String(error),
-            operation: 'boot',
+            operation: "boot",
         };
     }
 }

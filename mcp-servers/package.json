@@ -1,5 +1,25 @@
 {
-  "name": "mcp-servers",
+  "name": "@xclaude/mcp-servers",
+  "version": "1.0.0",
+  "description": "Root package for all xc-assist MCP servers",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:all",
+    "build:all": "npm run build:xc-assist",
+    "build:xc-assist": "npm run build --workspace=xc-assist",
+    "watch": "npm run watch --workspaces --if-present",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "ts:check": "npm run ts:check --workspaces --if-present",
+    "clean": "rm -rf */dist",
+    "install-all": "npm install --workspaces"
+  },
+  "workspaces": [
+    "xc-assist"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  }
 }

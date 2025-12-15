@@ -2,9 +2,9 @@
  * Safe command execution utilities
  */
 
-import { spawn } from 'child_process';
-import type { CommandResult } from '../types/base.js';
-import { COMMAND_CONFIG } from './constants.js';
+import { spawn } from "child_process";
+import type { CommandResult } from "../types/base.js";
+import { COMMAND_CONFIG } from "./constants.js";
 
 export interface CommandOptions {
   timeout?: number;
@@ -24,7 +24,7 @@ export interface CommandOptions {
 export async function runCommand(
   command: string,
   args: string[],
-  options: CommandOptions = {}
+  options: CommandOptions = {},
 ): Promise<CommandResult> {
   const defaultOptions = {
     timeout: COMMAND_CONFIG.DEFAULT_TIMEOUT_MS,
@@ -38,8 +38,8 @@ export async function runCommand(
       timeout: defaultOptions.timeout,
     });
 
-    let stdout = '';
-    let stderr = '';
+    let stdout = "";
+    let stderr = "";
     let killed = false;
 
     // Set up timeout
@@ -50,7 +50,7 @@ export async function runCommand(
     }, defaultOptions.timeout);
 
     // Collect stdout
-    child.stdout?.on('data', (data) => {
+    child.stdout?.on("data", (data) => {
       stdout += data.toString();
       if (stdout.length > defaultOptions.maxBuffer!) {
         killed = true;
@@ -61,12 +61,12 @@ export async function runCommand(
     });
 
     // Collect stderr
-    child.stderr?.on('data', (data) => {
+    child.stderr?.on("data", (data) => {
       stderr += data.toString();
     });
 
     // Handle process exit
-    child.on('close', (code) => {
+    child.on("close", (code) => {
       clearTimeout(timeoutId);
       if (!killed) {
         resolve({
@@ -78,7 +78,7 @@ export async function runCommand(
     });
 
     // Handle process errors
-    child.on('error', (error) => {
+    child.on("error", (error) => {
       clearTimeout(timeoutId);
       if (!killed) {
         reject(new Error(`Failed to execute command: ${error.message}`));
@@ -94,36 +94,38 @@ export async function runCommand(
  * @param searchPath - Directory to search in (defaults to current directory)
  * @returns Path to the found project/workspace, or null if not found
  */
-export async function findXcodeProject(searchPath: string = '.'): Promise<string | null> {
+export async function findXcodeProject(
+  searchPath: string = ".",
+): Promise<string | null> {
   try {
     // Search for .xcworkspace first
-    const workspaceResult = await runCommand('find', [
+    const workspaceResult = await runCommand("find", [
       searchPath,
-      '-maxdepth',
-      '2',
-      '-name',
-      '*.xcworkspace',
-      '-type',
-      'd',
+      "-maxdepth",
+      "2",
+      "-name",
+      "*.xcworkspace",
+      "-type",
+      "d",
     ]);
 
-    const workspacePath = workspaceResult.stdout.split('\n')[0]?.trim();
+    const workspacePath = workspaceResult.stdout.split("\n")[0]?.trim();
     if (workspacePath) {
       return workspacePath;
     }
 
     // Fall back to .xcodeproj
-    const projectResult = await runCommand('find', [
+    const projectResult = await runCommand("find", [
       searchPath,
-      '-maxdepth',
-      '2',
-      '-name',
-      '*.xcodeproj',
-      '-type',
-      'd',
+      "-maxdepth",
+      "2",
+      "-name",
+      "*.xcodeproj",
+      "-type",
+      "d",
     ]);
 
-    const projectPath = projectResult.stdout.split('\n')[0]?.trim();
+    const projectPath = projectResult.stdout.split("\n")[0]?.trim();
     if (projectPath) {
       return projectPath;
     }
@@ -141,17 +143,20 @@ export async function findXcodeProject(searchPath: string = '.'): Promise<string
  * @param maxLines - Maximum error lines to return (default: 10)
  * @returns Array of error/warning lines
  */
-export function extractBuildErrors(output: string, maxLines: number = 10): string[] {
-  const lines = output.split('\n');
+export function extractBuildErrors(
+  output: string,
+  maxLines: number = 10,
+): string[] {
+  const lines = output.split("\n");
   const errors: string[] = [];
 
   for (const line of lines) {
     if (
-      line.includes('error:') ||
-      line.includes('Error:') ||
-      line.includes('ERROR') ||
-      line.includes('warning:') ||
-      line.includes('fatal error')
+      line.includes("error:") ||
+      line.includes("Error:") ||
+      line.includes("ERROR") ||
+      line.includes("warning:") ||
+      line.includes("fatal error")
     ) {
       errors.push(line.trim());
       if (errors.length >= maxLines) {

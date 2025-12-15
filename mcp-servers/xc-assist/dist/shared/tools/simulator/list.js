@@ -3,25 +3,25 @@
  *
  * Enumerate available simulators
  */
-import { runCommand } from '../../utils/command.js';
-import { logger } from '../../utils/logger.js';
+import { runCommand } from "../../utils/command.js";
+import { logger } from "../../utils/logger.js";
 export const simulatorListDefinition = {
-    name: 'simulator_list',
-    description: 'List available iOS simulators',
+    name: "simulator_list",
+    description: "List available iOS simulators",
     inputSchema: {
-        type: 'object',
+        type: "object",
         properties: {
             availability: {
-                type: 'string',
-                enum: ['available', 'unavailable', 'all'],
-                description: 'Filter by availability (default: available)',
+                type: "string",
+                enum: ["available", "unavailable", "all"],
+                description: "Filter by availability (default: available)",
             },
             device_type: {
-                type: 'string',
+                type: "string",
                 description: 'Filter by device type (e.g. "iPhone")',
             },
             runtime: {
-                type: 'string',
+                type: "string",
                 description: 'Filter by runtime (e.g. "iOS 17")',
             },
         },
@@ -29,9 +29,15 @@ export const simulatorListDefinition = {
 };
 export async function simulatorList(params) {
     try {
+        const availability = params.availability ?? "available";
         // Execute simctl list
-        logger.info('Listing simulators');
-        const result = await runCommand('xcrun', ['simctl', 'list', 'devices', '-j']);
+        logger.info("Listing simulators");
+        const result = await runCommand("xcrun", [
+            "simctl",
+            "list",
+            "devices",
+            "-j",
+        ]);
         // Parse JSON output
         const json = JSON.parse(result.stdout);
         const devices = [];
@@ -39,9 +45,9 @@ export async function simulatorList(params) {
         for (const [runtime, runtimeDevices] of Object.entries(json.devices)) {
             for (const device of runtimeDevices) {
                 // Apply filters
-                if (params.availability === 'available' && !device.isAvailable)
+                if (availability === "available" && !device.isAvailable)
                     continue;
-                if (params.availability === 'unavailable' && device.isAvailable)
+                if (availability === "unavailable" && device.isAvailable)
                     continue;
                 if (params.device_type && !device.name.includes(params.device_type))
                     continue;
@@ -51,7 +57,9 @@ export async function simulatorList(params) {
                     name: device.name,
                     udid: device.udid,
                     state: device.state,
-                    runtime: runtime.replace('com.apple.CoreSimulator.SimRuntime.', '').replace(/-/g, ' '),
+                    runtime: runtime
+                        .replace("com.apple.CoreSimulator.SimRuntime.", "")
+                        .replace(/-/g, " "),
                     available: device.isAvailable,
                 });
             }
@@ -68,11 +76,11 @@ export async function simulatorList(params) {
         };
     }
     catch (error) {
-        logger.error('List simulators failed', error);
+        logger.error("List simulators failed", error);
         return {
             success: false,
             error: String(error),
-            operation: 'list',
+            operation: "list",
         };
     }
 }

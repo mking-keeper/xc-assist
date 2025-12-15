@@ -1,7 +1,7 @@
 {
   "name": "xc-assist",
   "version": "1.0.0",
-  "description": "iOS Simulator testing with 15 tools: build, lifecycle, UI automation, gestures, deep links",
+  "description": "iOS Simulator testing: build, lifecycle, UI automation, gestures, deep links",
   "author": {
     "name": "mking-keeper",
     "url": "https://github.com/mking-keeper"

@@ -5,7 +5,9 @@
 /**
  * Standard tool result structure
  */
-export type ToolResult<T = Record<string, never>> = SuccessResult<T> | ErrorResult;
+export type ToolResult<T = Record<string, never>> =
+  | SuccessResult<T>
+  | ErrorResult;
 
 /**
  * Successful operation result
@@ -34,7 +36,7 @@ export interface ToolDefinition {
   name: string;
   description: string;
   inputSchema: {
-    type: 'object';
+    type: "object";
     properties: Record<string, any>; // MCP SDK constraint
     required?: string[];
   };
