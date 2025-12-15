@@ -308,7 +308,9 @@ class XCAssistServer {
                 type: "text",
                 text: JSON.stringify(
                   await simulatorSetLocation(
-                    args as unknown as Parameters<typeof simulatorSetLocation>[0],
+                    args as unknown as Parameters<
+                      typeof simulatorSetLocation
+                    >[0],
                   ),
                 ),
               },
@@ -336,7 +338,9 @@ class XCAssistServer {
                 type: "text",
                 text: JSON.stringify(
                   await simulatorPasteboard(
-                    args as unknown as Parameters<typeof simulatorPasteboard>[0],
+                    args as unknown as Parameters<
+                      typeof simulatorPasteboard
+                    >[0],
                   ),
                 ),
               },

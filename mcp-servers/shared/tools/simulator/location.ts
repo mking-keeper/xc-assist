@@ -65,7 +65,8 @@ export const simulatorSetLocationDefinition: ToolDefinition = {
       },
       speed: {
         type: "number",
-        description: "Movement speed in meters/second for 'start' action (default: 20)",
+        description:
+          "Movement speed in meters/second for 'start' action (default: 20)",
       },
       scenario: {
         type: "string",
@@ -172,7 +173,9 @@ export async function simulatorSetLocation(
           args.push(`${wp.latitude},${wp.longitude}`);
         }
 
-        logger.info(`Starting location route on ${deviceId} with ${params.waypoints.length} waypoints`);
+        logger.info(
+          `Starting location route on ${deviceId} with ${params.waypoints.length} waypoints`,
+        );
         const result = await runCommand("xcrun", args);
 
         if (result.code === 0) {
