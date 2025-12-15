@@ -103,7 +103,7 @@ describe("simulatorSetLocation", () => {
 
       expect(mockRunCommand).toHaveBeenCalledWith(
         "xcrun",
-        expect.arrayContaining(["location", "DEVICE-123"]),
+        expect.arrayContaining(["simctl", "location", "DEVICE-123"]),
       );
     });
 

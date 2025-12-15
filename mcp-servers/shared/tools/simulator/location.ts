@@ -69,7 +69,7 @@ export const simulatorSetLocationDefinition: ToolDefinition = {
       },
       scenario: {
         type: "string",
-        description: "Predefined scenario name for 'run' action (use 'list' to see available)",
+        description: "Predefined scenario name (use 'list' to see available)",
       },
     },
     required: ["action"],
