@@ -12,11 +12,10 @@ xc-assist/
 │   ├── plugin.json        # Plugin manifest
 │   └── marketplace.json   # Marketplace config
 ├── mcp-servers/
-│   ├── shared/            # Shared code (mirrors upstream)
+│   ├── shared/            # Shared code
 │   │   ├── tools/
 │   │   │   ├── idb/       # IDB tools
-│   │   │   ├── simulator/ # Simulator tools
-│   │   │   └── xcode/     # Xcode tools
+│   │   │   └── simulator/ # Simulator tools
 │   │   ├── types/         # Type definitions
 │   │   └── utils/         # Utilities
 │   └── xc-assist/
@@ -28,17 +27,11 @@ xc-assist/
 └── README.md
 ```
 
-## Tools (15)
-
-### Build
-
-- `xcode_build` - Build Xcode project
+## Tools (12)
 
 ### Simulator Lifecycle
 
 - `simulator_list` - List simulators
-- `simulator_boot` - Start simulator
-- `simulator_install_app` - Install .app
 - `simulator_launch_app` - Launch app
 - `simulator_terminate_app` - Kill app
 
@@ -62,6 +55,23 @@ xc-assist/
 ```bash
 npm install
 npm run build
+```
+
+## Quality Checks
+
+Run before committing:
+
+```bash
+npm run format:check  # Code formatting
+npm run coverage      # Tests with 80% coverage threshold
+npm run ts:check      # TypeScript type checking
+npm run audit:check   # Security vulnerabilities
+```
+
+Fix formatting issues:
+
+```bash
+npx prettier --write .
 ```
 
 ## Repository

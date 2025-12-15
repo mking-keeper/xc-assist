@@ -8,13 +8,8 @@ iOS Simulator testing plugin for Claude Code.
 
 ## Tools
 
-### Build
-- `xcode_build` - Build Xcode project
-
 ### Simulator Lifecycle
 - `simulator_list` - List available simulators
-- `simulator_boot` - Start a simulator
-- `simulator_install_app` - Install .app bundle
 - `simulator_launch_app` - Launch app by bundle ID
 - `simulator_terminate_app` - Kill running app
 
@@ -74,8 +69,6 @@ idb list-targets
 
 ```
 "List available simulators"
-"Boot iPhone 15 Pro"
-"Build my app for the simulator"
 "Install and launch the app"
 "Tap the Login button"
 "Type 'hello' into the text field"
@@ -86,7 +79,6 @@ idb list-targets
 ### Example Workflow
 
 ```
-> "Build my app and run it on iPhone 15"
 > "Tap the Sign In button"
 > "Enter test@example.com in the email field"
 > "Take a screenshot of the current state"

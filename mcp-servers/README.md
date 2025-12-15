@@ -23,15 +23,10 @@ mcp-servers/
 - **Accessibility-First**: IDB tools for fast UI automation (120ms vs 2000ms screenshots)
 - **Comprehensive**: Build, lifecycle, UI automation, and utilities
 
-## The 15 Tools
+## The 12 Tools
 
-### Build (1 tool)
-- `xcode_build` - Build Xcode project with automatic error extraction
-
-### Simulator Lifecycle (5 tools)
+### Simulator Lifecycle (3 tools)
 - `simulator_list` - List available simulators
-- `simulator_boot` - Boot simulator device
-- `simulator_install_app` - Install .app bundle
 - `simulator_launch_app` - Launch app by bundle ID
 - `simulator_terminate_app` - Terminate running app
 
@@ -72,17 +67,10 @@ The MCP auto-enables via the plugin. Test with:
 
 ## Tool Library
 
-### Xcode Tools
-| Tool | Description |
-|------|-------------|
-| `xcode_build` | Build project with scheme, configuration, destination |
-
 ### Simulator Tools
 | Tool | Description |
 |------|-------------|
 | `simulator_list` | List simulators with availability filter |
-| `simulator_boot` | Boot by device ID or name |
-| `simulator_install_app` | Install .app to simulator |
 | `simulator_launch_app` | Launch by bundle identifier |
 | `simulator_terminate_app` | Kill running app |
 | `simulator_screenshot` | Capture PNG screenshot |

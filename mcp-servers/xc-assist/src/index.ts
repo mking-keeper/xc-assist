@@ -13,12 +13,6 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-// Import Xcode tools
-import {
-  xcodeBuild,
-  xcodeBuildDefinition,
-} from "../../shared/tools/xcode/build.js";
-
 // Import simulator tools
 import {
   simulatorScreenshot,
@@ -40,14 +34,6 @@ import {
   simulatorList,
   simulatorListDefinition,
 } from "../../shared/tools/simulator/list.js";
-import {
-  simulatorBoot,
-  simulatorBootDefinition,
-} from "../../shared/tools/simulator/boot.js";
-import {
-  simulatorInstallApp,
-  simulatorInstallAppDefinition,
-} from "../../shared/tools/simulator/install-app.js";
 import {
   simulatorLaunchApp,
   simulatorLaunchAppDefinition,
@@ -96,12 +82,8 @@ class XCAssistServer {
   private registerTools() {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
       tools: [
-        // Build
-        xcodeBuildDefinition,
         // Simulator lifecycle
         simulatorListDefinition,
-        simulatorBootDefinition,
-        simulatorInstallAppDefinition,
         simulatorLaunchAppDefinition,
         simulatorTerminateAppDefinition,
         // UI inspection
@@ -123,21 +105,6 @@ class XCAssistServer {
       const { name, arguments: args } = request.params;
 
       switch (name) {
-        // Build
-        case "xcode_build":
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(
-                  await xcodeBuild(
-                    args as unknown as Parameters<typeof xcodeBuild>[0],
-                  ),
-                ),
-              },
-            ],
-          };
-
         // Simulator lifecycle
         case "simulator_list":
           return {
@@ -147,36 +114,6 @@ class XCAssistServer {
                 text: JSON.stringify(
                   await simulatorList(
                     args as unknown as Parameters<typeof simulatorList>[0],
-                  ),
-                ),
-              },
-            ],
-          };
-
-        case "simulator_boot":
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(
-                  await simulatorBoot(
-                    args as unknown as Parameters<typeof simulatorBoot>[0],
-                  ),
-                ),
-              },
-            ],
-          };
-
-        case "simulator_install_app":
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(
-                  await simulatorInstallApp(
-                    args as unknown as Parameters<
-                      typeof simulatorInstallApp
-                    >[0],
                   ),
                 ),
               },
