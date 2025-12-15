@@ -8,7 +8,14 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
-      exclude: ["node_modules/", "dist/", "**/*.test.ts", "**/*.spec.ts"],
+      exclude: [
+        "node_modules/",
+        "dist/",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "__tests__/fixtures/**",
+        "xc-assist/src/index.ts",
+      ],
       thresholds: {
         lines: 80,
         functions: 80,

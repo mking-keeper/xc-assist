@@ -7,19 +7,17 @@ description: iOS Simulator UI automation and testing guidance. Use when building
 
 **Use the xc-assist MCP tools for all iOS simulator operations**
 
-The xc-assist plugin provides 15 MCP tools for iOS development:
+The xc-assist plugin provides 12 MCP tools for iOS development:
 
-- Build, simulator lifecycle, UI automation, and utilities
+- Simulator lifecycle, UI automation, and utilities
 
 ## CRITICAL: Always Use MCP Tools First
 
-**This is the most important rule:** When working with iOS builds and simulators, you MUST use xc-assist MCP tools.
+**This is the most important rule:** When working with iOS simulators, you MUST use xc-assist MCP tools.
 
-- **DO**: Use `xcode_build` for all build operations
 - **DO**: Use `simulator_*` tools for simulator management
 - **DO**: Use `idb_*` tools for UI automation
-- **NEVER**: Fall back to bash `xcodebuild` or `xcrun simctl` commands
-- **NEVER**: Use `xcodebuild` directly in bash
+- **NEVER**: Fall back to bash `xcrun simctl` commands
 
 **Why?** The MCP tools provide:
 
@@ -30,31 +28,25 @@ The xc-assist plugin provides 15 MCP tools for iOS development:
 
 ## Quick Reference
 
-| Task            | MCP Tool                | Key Parameters                 |
-| --------------- | ----------------------- | ------------------------------ |
-| Build app       | `xcode_build`           | scheme, configuration          |
-| List simulators | `simulator_list`        | availability, device_type      |
-| Boot simulator  | `simulator_boot`        | device_id                      |
-| Install app     | `simulator_install_app` | app_path, device_id            |
-| Launch app      | `simulator_launch_app`  | app_identifier                 |
-| Query UI        | `idb_describe`          | operation, target              |
-| Find element    | `idb_find_element`      | query                          |
-| Tap element     | `idb_tap`               | x, y                           |
-| Type text       | `idb_input`             | text                           |
-| Swipe/gesture   | `idb_gesture`           | gesture_type, start/end coords |
-| Screenshot      | `simulator_screenshot`  | device_id                      |
-| Open URL        | `simulator_openurl`     | url                            |
+| Task            | MCP Tool               | Key Parameters                 |
+| --------------- | ---------------------- | ------------------------------ |
+| List simulators | `simulator_list`       | availability, device_type      |
+| Launch app      | `simulator_launch_app` | app_identifier                 |
+| Query UI        | `idb_describe`         | operation, target              |
+| Find element    | `idb_find_element`     | query                          |
+| Tap element     | `idb_tap`              | x, y                           |
+| Type text       | `idb_input`            | text                           |
+| Swipe/gesture   | `idb_gesture`          | gesture_type, start/end coords |
+| Screenshot      | `simulator_screenshot` | device_id                      |
+| Open URL        | `simulator_openurl`    | url                            |
 
 ## Standard Workflows
 
-### 1. Build and Launch App
+### 1. Launch App
 
 ```
-1. xcode_build (scheme: "MyApp", configuration: "Debug")
-2. simulator_list (availability: "available")
-3. simulator_boot (device_id: "iPhone 15")
-4. simulator_install_app (app_path: "/path/to/MyApp.app")
-5. simulator_launch_app (app_identifier: "com.example.MyApp")
+1. simulator_list (availability: "available")
+2. simulator_launch_app (app_identifier: "com.example.MyApp")
 ```
 
 ### 2. UI Automation Flow
@@ -101,15 +93,9 @@ idb_gesture (gesture_type: "button", button_type: "HOME")
 
 ## Tool Categories
 
-### Build (1 tool)
-
-- `xcode_build` - Build with automatic error extraction
-
-### Simulator Lifecycle (5 tools)
+### Simulator Lifecycle (3 tools)
 
 - `simulator_list` - Discover available devices
-- `simulator_boot` - Start simulator
-- `simulator_install_app` - Install .app bundle
 - `simulator_launch_app` - Launch by bundle ID
 - `simulator_terminate_app` - Kill running app
 
@@ -134,9 +120,7 @@ idb_gesture (gesture_type: "button", button_type: "HOME")
 
 | Task        | Wrong                        | Right                  |
 | ----------- | ---------------------------- | ---------------------- |
-| Build       | `xcodebuild -scheme...`      | `xcode_build`          |
 | List sims   | `xcrun simctl list`          | `simulator_list`       |
-| Boot sim    | `xcrun simctl boot`          | `simulator_boot`       |
 | Screenshots | `xcrun simctl io screenshot` | `simulator_screenshot` |
 
 ### Bash is OK For

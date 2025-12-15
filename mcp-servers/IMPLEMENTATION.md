@@ -6,7 +6,7 @@
 
 **Location**: `shared/`
 
-- **15 individual tools** across 3 categories
+- **12 individual tools** across 2 categories
 - **Type definitions** (base, xcode, simulator, idb)
 - **Utility modules** (command, logger, config)
 
@@ -21,7 +21,7 @@ Each tool is:
 
 | Server        | Tools | Use Case                   |
 | ------------- | ----- | -------------------------- |
-| **xc-assist** | 15    | Full iOS simulator testing |
+| **xc-assist** | 12    | Full iOS simulator testing |
 
 ### 3. Build Infrastructure
 
@@ -42,12 +42,8 @@ Each tool is:
 mcp-servers/
 ├── shared/
 │   ├── tools/
-│   │   ├── xcode/
-│   │   │   └── build.ts
 │   │   ├── simulator/
 │   │   │   ├── list.ts
-│   │   │   ├── boot.ts
-│   │   │   ├── install-app.ts
 │   │   │   ├── launch-app.ts
 │   │   │   ├── terminate-app.ts
 │   │   │   ├── screenshot.ts
@@ -121,17 +117,11 @@ npm run test
 - **Type safety**: Shared types across all tools
 - **DRY principle**: No duplication
 
-## Tools (15 Total)
+## Tools (12 Total)
 
-### Xcode Tools (1)
-
-- `xcode_build` - Build project with error extraction
-
-### Simulator Tools (8)
+### Simulator Tools (6)
 
 - `simulator_list` - List simulators
-- `simulator_boot` - Boot device
-- `simulator_install_app` - Install app
 - `simulator_launch_app` - Launch app
 - `simulator_terminate_app` - Terminate app
 - `simulator_screenshot` - Capture screenshot
@@ -151,7 +141,7 @@ npm run test
 
 | Metric        | Target     | Status |
 | ------------- | ---------- | ------ |
-| Tool count    | 15         | ✓      |
+| Tool count    | 12         | ✓      |
 | MCP servers   | 1          | ✓      |
 | Shared tools  | 100%       | ✓      |
 | Type safety   | Zero `any` | ✓      |

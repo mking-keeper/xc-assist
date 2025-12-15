@@ -8,16 +8,12 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
-// Import Xcode tools
-import { xcodeBuild, xcodeBuildDefinition, } from "../../shared/tools/xcode/build.js";
 // Import simulator tools
 import { simulatorScreenshot, simulatorScreenshotDefinition, } from "../../shared/tools/simulator/screenshot.js";
 import { simulatorOpenURL, simulatorOpenURLDefinition, } from "../../shared/tools/simulator/openurl.js";
 import { simulatorTerminateApp, simulatorTerminateAppDefinition, } from "../../shared/tools/simulator/terminate-app.js";
 import { simulatorGetAppContainer, simulatorGetAppContainerDefinition, } from "../../shared/tools/simulator/get-app-container.js";
 import { simulatorList, simulatorListDefinition, } from "../../shared/tools/simulator/list.js";
-import { simulatorBoot, simulatorBootDefinition, } from "../../shared/tools/simulator/boot.js";
-import { simulatorInstallApp, simulatorInstallAppDefinition, } from "../../shared/tools/simulator/install-app.js";
 import { simulatorLaunchApp, simulatorLaunchAppDefinition, } from "../../shared/tools/simulator/launch-app.js";
 // Import IDB tools
 import { idbDescribe, idbDescribeDefinition, } from "../../shared/tools/idb/describe.js";
@@ -43,12 +39,8 @@ class XCAssistServer {
     registerTools() {
         this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
             tools: [
-                // Build
-                xcodeBuildDefinition,
                 // Simulator lifecycle
                 simulatorListDefinition,
-                simulatorBootDefinition,
-                simulatorInstallAppDefinition,
                 simulatorLaunchAppDefinition,
                 simulatorTerminateAppDefinition,
                 // UI inspection
@@ -68,16 +60,6 @@ class XCAssistServer {
         this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
             const { name, arguments: args } = request.params;
             switch (name) {
-                // Build
-                case "xcode_build":
-                    return {
-                        content: [
-                            {
-                                type: "text",
-                                text: JSON.stringify(await xcodeBuild(args)),
-                            },
-                        ],
-                    };
                 // Simulator lifecycle
                 case "simulator_list":
                     return {
@@ -85,24 +67,6 @@ class XCAssistServer {
                             {
                                 type: "text",
                                 text: JSON.stringify(await simulatorList(args)),
-                            },
-                        ],
-                    };
-                case "simulator_boot":
-                    return {
-                        content: [
-                            {
-                                type: "text",
-                                text: JSON.stringify(await simulatorBoot(args)),
-                            },
-                        ],
-                    };
-                case "simulator_install_app":
-                    return {
-                        content: [
-                            {
-                                type: "text",
-                                text: JSON.stringify(await simulatorInstallApp(args)),
                             },
                         ],
                     };
