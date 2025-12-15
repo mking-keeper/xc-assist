@@ -82,8 +82,6 @@ class XCAssistServer {
         name: "xc-assist",
         version: "1.0.0",
         title: "iOS Simulator Testing",
-        description:
-          "UI testing with gestures, deep links, app lifecycle, and accessibility-first automation",
       },
       {
         capabilities: {

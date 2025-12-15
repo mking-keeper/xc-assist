@@ -12,6 +12,7 @@
     "test": "cd mcp-servers && npm run test",
     "coverage": "cd mcp-servers && npm run coverage",
     "ts:check": "cd mcp-servers && npm run ts:check",
+    "audit:check": "npm audit --audit-level=high",
     "format:check": "prettier --check .",
     "prepare": "husky"
   },
@@ -40,8 +41,5 @@
     "prettier": "^3.6.2",
     "typescript": "5.9.3",
     "vitest": "^1.6.0"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "1.21.0"
   }
 }
